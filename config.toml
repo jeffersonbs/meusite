@@ -15,8 +15,8 @@ paginate = 5
 
 [languages]
   [languages.en]
-    title = "Hello Friend"
-    subtitle = "A simple theme for Hugo"
+    title = "Jefferson Barbosa"
+    subtitle = "Portfólio"
     keywords = ""
     copyright = ""
     menuMore = "Mostrar mais"
