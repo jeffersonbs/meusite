@@ -1,0 +1,48 @@
+baseurl = "/"
+languageCode = "pt-br"
+theme = "hugo-theme-hello-friend"
+paginate = 5
+
+[params]
+  # dir name of your blog content (default is `content/posts`)
+  contentTypeName = "post"
+  # "light" or "dark"
+  defaultTheme = "light"
+  # if you set this to 0, only submenu trigger will be visible
+  showMenuItems = 2
+  # Enable to show reading time in minutes for posts
+  showReadingTime = true
+
+[languages]
+  [languages.en]
+    title = "Hello Friend"
+    subtitle = "A simple theme for Hugo"
+    keywords = ""
+    copyright = ""
+    menuMore = "Mostrar mais"
+    writtenBy = "Escrito por"
+    readMore = "Leia mais"
+    readOtherPosts = "Leia outras postagens"
+    newerPosts = "Postagens mais recentes"
+    olderPosts = "Postagens mais antigas"
+    minuteReadingTime = "minuto de leitura"
+    dateFormatSingle = "2006-01-02"
+    dateFormatList = "2006-01-02"
+
+    [languages.en.params.logo]
+      logoText = "Jefferson Barbosa"
+      logoHomeLink = "/"
+    # or
+    #
+    # path = "/img/your-example-logo.svg"
+    # alt = "Your example logo alt text"
+
+    [languages.en.menu]
+      [[languages.en.menu.main]]
+        identifier = "about"
+        name = "Sobre"
+        url = "/about"
+      [[languages.en.menu.main]]
+        identifier = "showcase"
+        name = "Portfólio"
+        url = "/showcase"
