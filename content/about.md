@@ -1,21 +1,15 @@
 ---
-author: Radek
-date: "2019-01-25"
-title: About
+author: Jefferson Barbosa
+date: "2019-09-30"
+title: Sobre
 ---
 
-# Hi there
+# Olá
 
-My name is Radek and I'm the author of this theme. I made it to help you present your ideas easier.
+Meu nome é Jefferson Barbosa, sou bacharel em estatística pela UFRN-Universidade Federal do Rio Grande do Norte e atualmente moro em São Gonçalo do Amarante/RN.
 
-We all know how hard is to start something on the web, especially these days. You need to prepare a bunch of stuff, configure them and when that’s done — create the content.
+Me interesso principalmente pela análise multivariada, especialmente pelo modelo linear geral e seus derivados.
 
-This theme is pretty basic and covers all of the essentials. All you have to do is start typing!
+O objetivo deste site é o de mostrar minhas habilidades em ciência de dados. 
 
-The theme includes:
-
-- **light/dark mode**, depending on your preferences
-- great reading experience thanks to [**Inter UI font**](https://rsms.me/inter/), made by [Rasmus Andersson](https://rsms.me/about/)
-- nice code highlighting thanks to [**PrismJS**](https://prismjs.com)
-
-So, there you have it... enjoy!
+Para entar em contato comigo pode enviar e-mail para jeffersonbarbosa.rn@gmail.com, acessar meu [linkedin](www.linkedin.com/in/jeffersonbarbosas) ou minha página no [Kaggle](https://www.kaggle.com/jeffersonbs).

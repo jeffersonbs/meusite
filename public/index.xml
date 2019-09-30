@@ -6,20 +6,21 @@
     <description>Recent content on Jefferson Barbosa</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Fri, 25 Jan 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 30 Sep 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>About</title>
+      <title>Sobre</title>
       <link>/about/</link>
-      <pubDate>Fri, 25 Jan 2019 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 30 Sep 2019 00:00:00 +0000</pubDate>
       
       <guid>/about/</guid>
-      <description>Hi there My name is Radek and I&amp;rsquo;m the author of this theme. I made it to help you present your ideas easier.
-We all know how hard is to start something on the web, especially these days. You need to prepare a bunch of stuff, configure them and when that’s done — create the content.
-This theme is pretty basic and covers all of the essentials. All you have to do is start typing!</description>
+      <description>Olá Meu nome é Jefferson Barbosa, sou bacharel em estatística pela UFRN-Universidade Federal do Rio Grande do Norte e atualmente moro em São Gonçalo do Amarante/RN.
+Me interesso principalmente pela análise multivariada, especialmente pelo modelo linear geral e seus derivados.
+O objetivo deste site é o de mostrar minhas habilidades em ciência de dados.
+Para entar em contato comigo pode enviar e-mail para jeffersonbarbosa.rn@gmail.com, acessar meu linkedin ou minha página no Kaggle.</description>
     </item>
     
     <item>
