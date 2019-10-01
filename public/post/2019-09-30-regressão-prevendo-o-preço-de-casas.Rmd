@@ -12,10 +12,10 @@ tags:
 
   <h2> Sobre os dados </h2>
   
-  Os dados utilizados aqui são provenientes da competição do [Kaggle](kaggle.com) chamada de [House prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/overview). O conjunto de dados contêm 79 variáveis explicativas sobre algumas casas em Ames/Iowa. E o objetivo, claro, é o de predizer o valor de venda dessas casas. 
+  Os dados utilizados aqui são provenientes da competição do [Kaggle](kaggle.com) chamada de [House prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/overview). O conjunto de dados contêm 80 variáveis explicativas sobre algumas casas em Ames/Iowa. E o objetivo é o de predizer o valor de venda dessas casas. 
   
   
-  Nesta publicação eu mostrarei o passo a passo da minha análise desses dados, mostrado a forma como eu limpei os dados, o feature engineering e a modelagem. Vou utilizar uma regressão linear como modelo base e irei comparar os resultados com modelos feitos com Random Forest, Stochastic Gradient Boosting e Bayesian. Regularized Neural Networks. 
+  Nesta publicação eu mostrarei o passo a passo da minha análise, mostrado a forma como eu limpei os dados, o feature engineering e a modelagem. Vou utilizar uma regressão linear como modelo base e irei comparar os resultados com modelos feitos com Random Forest, Stochastic Gradient Boosting e Bayesian. Regularized Neural Networks. 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = T,
                       results = "hide")
@@ -78,17 +78,23 @@ As variáveis que indicam a identificação da casa, o mês, ano, tipo e condiç
 dados <- dados %>%
   select(-c(MoSold, YrSold, SaleType, SaleCondition, Id))
 ```
+E em algumas variáveis categoricas o nível foi descrito por um número, portanto será necessário converter para uma string.
+```{r}
+dados$MSSubClass = as.character(dados$MSSubClass)
+dados$OverallQual = as.character(dados$OverallQual)
+dados$OverallCond = as.character(dados$OverallCond)
+```
 O gráfico abaixo mostra a porcentagem de NA's em cada variável.
 ```{r, results='markup'}
 gg_miss_var(dados, show_pct = T) +
   labs(x = "Variáveis",y = "Porcentagem de NA")
 ```
-Irei remover a variável com mais de 20% de NA.
+Irei remover a variável com mais de 20% de NA's
 ```{r}
 dados <- dados %>%
   select(-c(MiscFeature))
 ```
-Vou imputar a categoria mais frequente ou a mediana das observações, caso seja numerica, nas demais variáveis.
+e vou imputar a categoria mais frequente ou a mediana das observações, caso seja numérica, nas demais variáveis.
 ```{r}
 #Convertendo as strings em fatores 
 #Encontra as colunas que possuem string
@@ -126,7 +132,7 @@ ggplot(dados, aes(x = SalePrice)) +
   geom_density() + theme_bw()
 ```
 
-E comparando os quantis da distribuição de SalePrice com os quantis teóricos da distribuição normal, podemos ver que a variável foge bastante da hipótese de normalidade.
+e comparando os quantis da distribuição de SalePrice com os quantis teóricos da distribuição normal, podemos ver que a variável foge bastante da hipótese de normalidade.
 ```{r}
 ggplot(dados, aes(sample = SalePrice)) +
   geom_qq() + geom_qq_line() + theme_bw()
@@ -137,7 +143,7 @@ O logaritmo natural parece amenizar bastante o problema da assimetria.
 ggplot(dados, aes(x = log(SalePrice))) + 
   geom_density() + theme_bw()
 ```
-Mas a variável ainda não se adequa a distribuição normal, o que não é um problema para os métodos que irei utilizar.
+Mas apesar de estar bem mais próxima de uma gaussiana, a variável ainda não se adequa a distribuição normal, o que não é um problema para os métodos que irei utilizar.
 ```{r}
 ggplot(dados, aes(sample = log(SalePrice))) + 
   geom_qq() + geom_qq_line() + theme_bw()
@@ -148,10 +154,10 @@ dados <- dados %>%
   mutate(SalePrice = log(SalePrice))
 ```
 Abaixo é mostrado o coeficiente de assmimetria para as demais variáveis numéricas. Algumas delas possuem assimetrias bastante significativas e será necessário aplicar uma transformação para corrigir isto.
-```{r}
+```{r, include=T, results='markup'}
 psych::skew(select_if(dados, is.numeric))
 ```
-Como essas variáveis possuem zeros ou valores negativos, não será possível aplicar o logaritmo natural como foi com SalePrice, então aplicarei a raiz cúbica de toda variável com assimetria menor que -0.75 ou maior que 0.75.
+Como essas variáveis possuem zeros ou valores negativos, não será possível aplicar o logaritmo natural como foi feito com SalePrice, então aplicarei a raiz cúbica de toda variável com assimetria menor que -0.75 ou maior que 0.75.
 ```{r}
 ind <- sapply(dados, is.numeric)
 for(i in 1:ncol(dados)){
@@ -163,7 +169,7 @@ for(i in 1:ncol(dados)){
 }
 ```
 O que produziu bons resultados.
-```{r}
+```{r, include=T, results='markup'}
 psych::skew(select_if(dados, is.numeric))
 ```
 

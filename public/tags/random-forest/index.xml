@@ -17,8 +17,8 @@
       <pubDate>Mon, 30 Sep 2019 00:00:00 +0000</pubDate>
       
       <guid>/post/regress%C3%A3o-predi%C3%A7%C3%A3o-do-pre%C3%A7o-de-casas/</guid>
-      <description>Sobre os dados  Os dados utilizados aqui são provenientes da competição do Kaggle chamada de House prices: Advanced Regression Techniques. O conjunto de dados contêm 79 variáveis explicativas sobre algumas casas em Ames/Iowa. E o objetivo, claro, é o de predizer o valor de venda dessas casas.
-Nesta publicação eu mostrarei o passo a passo da minha análise desses dados, mostrado a forma como eu limpei os dados, o feature engineering e a modelagem.</description>
+      <description>Sobre os dados  Os dados utilizados aqui são provenientes da competição do Kaggle chamada de House prices: Advanced Regression Techniques. O conjunto de dados contêm 80 variáveis explicativas sobre algumas casas em Ames/Iowa. E o objetivo é o de predizer o valor de venda dessas casas.
+Nesta publicação eu mostrarei o passo a passo da minha análise, mostrado a forma como eu limpei os dados, o feature engineering e a modelagem.</description>
     </item>
     
   </channel>

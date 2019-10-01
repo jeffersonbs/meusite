@@ -15,8 +15,8 @@ tags:
 <h2>
 Sobre os dados
 </h2>
-<p>Os dados utilizados aqui são provenientes da competição do <a href="kaggle.com">Kaggle</a> chamada de <a href="https://www.kaggle.com/c/house-prices-advanced-regression-techniques/overview">House prices: Advanced Regression Techniques</a>. O conjunto de dados contêm 79 variáveis explicativas sobre algumas casas em Ames/Iowa. E o objetivo, claro, é o de predizer o valor de venda dessas casas.</p>
-<p>Nesta publicação eu mostrarei o passo a passo da minha análise desses dados, mostrado a forma como eu limpei os dados, o feature engineering e a modelagem. Vou utilizar uma regressão linear como modelo base e irei comparar os resultados com modelos feitos com Random Forest, Stochastic Gradient Boosting e Bayesian. Regularized Neural Networks.</p>
+<p>Os dados utilizados aqui são provenientes da competição do <a href="kaggle.com">Kaggle</a> chamada de <a href="https://www.kaggle.com/c/house-prices-advanced-regression-techniques/overview">House prices: Advanced Regression Techniques</a>. O conjunto de dados contêm 80 variáveis explicativas sobre algumas casas em Ames/Iowa. E o objetivo é o de predizer o valor de venda dessas casas.</p>
+<p>Nesta publicação eu mostrarei o passo a passo da minha análise, mostrado a forma como eu limpei os dados, o feature engineering e a modelagem. Vou utilizar uma regressão linear como modelo base e irei comparar os resultados com modelos feitos com Random Forest, Stochastic Gradient Boosting e Bayesian. Regularized Neural Networks.</p>
 <h2>
 Processamento dos dados
 </h2>
@@ -140,14 +140,18 @@ dados$Fence[which(is.na(dados$Fence))] = &quot;Nf&quot;</code></pre>
 <p>As variáveis que indicam a identificação da casa, o mês, ano, tipo e condições da venda não serão uteis para a análise, então irei removê-las.</p>
 <pre class="r"><code>dados &lt;- dados %&gt;%
   select(-c(MoSold, YrSold, SaleType, SaleCondition, Id))</code></pre>
+<p>E em algumas variáveis categoricas o nível foi descrito por um número, portanto será necessário converter para uma string.</p>
+<pre class="r"><code>dados$MSSubClass = as.character(dados$MSSubClass)
+dados$OverallQual = as.character(dados$OverallQual)
+dados$OverallCond = as.character(dados$OverallCond)</code></pre>
 <p>O gráfico abaixo mostra a porcentagem de NA’s em cada variável.</p>
 <pre class="r"><code>gg_miss_var(dados, show_pct = T) +
   labs(x = &quot;Variáveis&quot;,y = &quot;Porcentagem de NA&quot;)</code></pre>
-<p><img src="/post/2019-09-30-regress%C3%A3o-prevendo-o-pre%C3%A7o-de-casas_files/figure-html/unnamed-chunk-7-1.png" width="672" />
-Irei remover a variável com mais de 20% de NA.</p>
+<p><img src="/post/2019-09-30-regress%C3%A3o-prevendo-o-pre%C3%A7o-de-casas_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+Irei remover a variável com mais de 20% de NA’s</p>
 <pre class="r"><code>dados &lt;- dados %&gt;%
   select(-c(MiscFeature))</code></pre>
-<p>Vou imputar a categoria mais frequente ou a mediana das observações, caso seja numerica, nas demais variáveis.</p>
+<p>e vou imputar a categoria mais frequente ou a mediana das observações, caso seja numérica, nas demais variáveis.</p>
 <pre class="r"><code>#Convertendo as strings em fatores 
 #Encontra as colunas que possuem string
 ind &lt;- sapply(dados, is.character)
@@ -159,7 +163,7 @@ dados &lt;- na.roughfix(dados)</code></pre>
 <p>E agora não há mais NA’s nos dados.</p>
 <pre class="r"><code>gg_miss_var(dados, show_pct = T) +
   labs(x = &quot;Variáveis&quot;,y = &quot;Porcentagem de NA&quot;)</code></pre>
-<img src="/post/2019-09-30-regress%C3%A3o-prevendo-o-pre%C3%A7o-de-casas_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="/post/2019-09-30-regress%C3%A3o-prevendo-o-pre%C3%A7o-de-casas_files/figure-html/unnamed-chunk-11-1.png" width="672" />
 <h3>
 Feature engineering
 </h3>
@@ -175,25 +179,30 @@ Feature engineering
 <p>A distribuição da variável resposta SalePrice é bastante assimétrica à direita</p>
 <pre class="r"><code>ggplot(dados, aes(x = SalePrice)) + 
   geom_density() + theme_bw()</code></pre>
-<p><img src="/post/2019-09-30-regress%C3%A3o-prevendo-o-pre%C3%A7o-de-casas_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
-<p>E comparando os quantis da distribuição de SalePrice com os quantis teóricos da distribuição normal, podemos ver que a variável foge bastante da hipótese de normalidade.</p>
+<p><img src="/post/2019-09-30-regress%C3%A3o-prevendo-o-pre%C3%A7o-de-casas_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>e comparando os quantis da distribuição de SalePrice com os quantis teóricos da distribuição normal, podemos ver que a variável foge bastante da hipótese de normalidade.</p>
 <pre class="r"><code>ggplot(dados, aes(sample = SalePrice)) +
   geom_qq() + geom_qq_line() + theme_bw()</code></pre>
-<p><img src="/post/2019-09-30-regress%C3%A3o-prevendo-o-pre%C3%A7o-de-casas_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="/post/2019-09-30-regress%C3%A3o-prevendo-o-pre%C3%A7o-de-casas_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
 <p>O logaritmo natural parece amenizar bastante o problema da assimetria.</p>
 <pre class="r"><code>ggplot(dados, aes(x = log(SalePrice))) + 
   geom_density() + theme_bw()</code></pre>
-<p><img src="/post/2019-09-30-regress%C3%A3o-prevendo-o-pre%C3%A7o-de-casas_files/figure-html/unnamed-chunk-15-1.png" width="672" />
-Mas a variável ainda não se adequa a distribuição normal, o que não é um problema para os métodos que irei utilizar.</p>
+<p><img src="/post/2019-09-30-regress%C3%A3o-prevendo-o-pre%C3%A7o-de-casas_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+Mas apesar de estar bem mais próxima de uma gaussiana, a variável ainda não se adequa a distribuição normal, o que não é um problema para os métodos que irei utilizar.</p>
 <pre class="r"><code>ggplot(dados, aes(sample = log(SalePrice))) + 
   geom_qq() + geom_qq_line() + theme_bw()</code></pre>
-<p><img src="/post/2019-09-30-regress%C3%A3o-prevendo-o-pre%C3%A7o-de-casas_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+<p><img src="/post/2019-09-30-regress%C3%A3o-prevendo-o-pre%C3%A7o-de-casas_files/figure-html/unnamed-chunk-17-1.png" width="672" />
 Portanto, manterei a transformação.</p>
 <pre class="r"><code>dados &lt;- dados %&gt;%
   mutate(SalePrice = log(SalePrice))</code></pre>
 <p>Abaixo é mostrado o coeficiente de assmimetria para as demais variáveis numéricas. Algumas delas possuem assimetrias bastante significativas e será necessário aplicar uma transformação para corrigir isto.</p>
 <pre class="r"><code>psych::skew(select_if(dados, is.numeric))</code></pre>
-<p>Como essas variáveis possuem zeros ou valores negativos, não será possível aplicar o logaritmo natural como foi com SalePrice, então aplicarei a raiz cúbica de toda variável com assimetria menor que -0.75 ou maior que 0.75.</p>
+<pre><code>##  [1]  2.4041986 12.1826150 -0.6122012 -0.5025278  2.6721170  1.6820413
+##  [7]  4.2465214  0.9183784  8.9928333  1.3637536  0.2113551  4.4791783
+## [13]  0.6749517  0.6482311 -3.8615534 -0.3418454  0.1796113  1.5382100
+## [19]  2.3594857  3.0835258 10.2831784  4.1137473 14.7979183 24.4265224
+## [25]  0.1210859  0.2641325  1.7730505</code></pre>
+<p>Como essas variáveis possuem zeros ou valores negativos, não será possível aplicar o logaritmo natural como foi feito com SalePrice, então aplicarei a raiz cúbica de toda variável com assimetria menor que -0.75 ou maior que 0.75.</p>
 <pre class="r"><code>ind &lt;- sapply(dados, is.numeric)
 for(i in 1:ncol(dados)){
   if(ind[i]){
@@ -204,6 +213,12 @@ for(i in 1:ncol(dados)){
 }</code></pre>
 <p>O que produziu bons resultados.</p>
 <pre class="r"><code>psych::skew(select_if(dados, is.numeric))</code></pre>
+<pre><code>##  [1] -0.08708814  2.24511025 -0.61220121 -0.50252776  0.70529915
+##  [6] -0.35450003  2.72602352 -1.00183220  7.70532558  0.38241571
+## [11]  0.21135511  0.34503426  0.67495173  0.64823107 -3.87770277
+## [16] -0.34184538  0.17961125  0.27269050  0.17711218  2.19119203
+## [21]  7.90825015  3.21481019 14.37182501  6.45735540  0.12108586
+## [26]  0.26413255  0.23135118</code></pre>
 <h2>
 Modelagem
 </h2>
