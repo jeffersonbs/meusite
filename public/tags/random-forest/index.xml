@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Jefferson Barbosa</title>
-    <link>/</link>
-    <description>Recent content on Jefferson Barbosa</description>
+    <title>random forest on Jefferson Barbosa</title>
+    <link>/tags/random-forest/</link>
+    <description>Recent content in random forest on Jefferson Barbosa</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
     <lastBuildDate>Mon, 30 Sep 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/random-forest/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -19,27 +19,6 @@
       <guid>/post/regress%C3%A3o-predi%C3%A7%C3%A3o-do-pre%C3%A7o-de-casas/</guid>
       <description>Sobre os dados  Os dados utilizados aqui são provenientes da competição do Kaggle chamada de House prices: Advanced Regression Techniques. O conjunto de dados contêm 79 variáveis explicativas sobre algumas casas em Ames/Iowa. E o objetivo, claro, é o de predizer o valor de venda dessas casas.
 Nesta publicação eu mostrarei o passo a passo da minha análise desses dados, mostrado a forma como eu limpei os dados, o feature engineering e a modelagem.</description>
-    </item>
-    
-    <item>
-      <title>Sobre</title>
-      <link>/about/</link>
-      <pubDate>Mon, 30 Sep 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/about/</guid>
-      <description>Olá Meu nome é Jefferson Barbosa, sou bacharel em estatística pela UFRN-Universidade Federal do Rio Grande do Norte e atualmente moro em São Gonçalo do Amarante/RN.
-Me interesso principalmente pela análise multivariada, especialmente pelo modelo linear geral e seus derivados.
-O objetivo deste site é o de mostrar minhas habilidades em ciência de dados.
-Para entar em contato comigo pode enviar e-mail para jeffersonbarbosa.rn@gmail.com, acessar meu linkedin ou minha página no Kaggle.</description>
-    </item>
-    
-    <item>
-      <title>Archive</title>
-      <link>/archive/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/archive/</guid>
-      <description></description>
     </item>
     
   </channel>

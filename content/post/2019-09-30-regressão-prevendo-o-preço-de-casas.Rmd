@@ -1,0 +1,177 @@
+---
+title: 'Regressão: predição do preço de casas'
+author: Jefferson Barbosa
+date: '2019-09-30'
+slug: regressão-predição-do-preço-de-casas
+categories: []
+tags:
+  - regression
+  - random forest
+  - gradient boosting
+---  
+
+  <h2> Sobre os dados </h2>
+  
+  Os dados utilizados aqui são provenientes da competição do [Kaggle](kaggle.com) chamada de [House prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/overview). O conjunto de dados contêm 79 variáveis explicativas sobre algumas casas em Ames/Iowa. E o objetivo, claro, é o de predizer o valor de venda dessas casas. 
+  
+  
+  Nesta publicação eu mostrarei o passo a passo da minha análise desses dados, mostrado a forma como eu limpei os dados, o feature engineering e a modelagem. Vou utilizar uma regressão linear como modelo base e irei comparar os resultados com modelos feitos com Random Forest, Stochastic Gradient Boosting e Bayesian. Regularized Neural Networks. 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T,
+                      results = "hide")
+```
+
+```{r, include=F}
+load("/home/jefferson/Documentos/House/house.Rdata")
+dados = read.table("/home/jefferson/Downloads/train.csv", head = T, sep = ",", stringsAsFactors = F)
+```
+
+<h2>Processamento dos dados</h2>
+Nesta etapa eu utilizarei os seguintes pacotes:
+```{r,warning=FALSE,message=FALSE}
+library(dplyr)
+library(naniar)
+library(corrplot)
+library(ggplot2)
+library(randomForest)
+```
+
+O conjunto de dados conta com 1460 observações e 80 variáveis explicativas.
+```{r, include=T, results='markup'}
+str(dados)
+```
+Olhando a descrição dos dados, vi que em algumas variáveis foi atribuido NA quando o elemento não estava presente. Irei alterar para uma string, tornando assim as observações úteis para a análise.
+
+```{r}
+#Alley
+dados$Alley[which(is.na(dados$Alley))] = "Naa"
+
+#Basement
+dados$BsmtQual[which(is.na(dados$BsmtQual))] = "Nb"
+dados$BsmtCond[which(is.na(dados$BsmtCond))] = "Nb"
+dados$BsmtExposure[which(is.na(dados$BsmtExposure))] = "Nb"
+dados$BsmtFinType1[which(is.na(dados$BsmtFinType1))] = "Nb"
+dados$BsmtFinType2[which(is.na(dados$BsmtFinType2))] = "Nb"
+
+#Fireplace
+dados$FireplaceQu[which(is.na(dados$FireplaceQu))] = "Nf"
+
+#Garage
+dados$GarageType[which(is.na(dados$GarageType))] = "Ng"
+dados$GarageFinish[which(is.na(dados$GarageFinish))] = "Ng"
+dados$GarageQual[which(is.na(dados$GarageQual))] = "Ng"
+dados$GarageCond[which(is.na(dados$GarageCond))] = "Ng"
+
+#Pool
+dados$PoolQC[which(is.na(dados$PoolQC))] = "Np"
+
+#Fence
+dados$Fence[which(is.na(dados$Fence))] = "Nf"
+```
+O mesmo foi feito com a variável que indica o ano de construção da garagem. Então nestes casos irei atribuir 0.
+
+```{r}
+dados$GarageYrBlt[which(is.na(dados$GarageYrBlt))] = 0
+```
+As variáveis que indicam a identificação da casa, o mês, ano, tipo e condições da venda não serão uteis para a análise, então irei removê-las. 
+```{r}
+dados <- dados %>%
+  select(-c(MoSold, YrSold, SaleType, SaleCondition, Id))
+```
+O gráfico abaixo mostra a porcentagem de NA's em cada variável.
+```{r, results='markup'}
+gg_miss_var(dados, show_pct = T) +
+  labs(x = "Variáveis",y = "Porcentagem de NA")
+```
+Irei remover a variável com mais de 20% de NA.
+```{r}
+dados <- dados %>%
+  select(-c(MiscFeature))
+```
+Vou imputar a categoria mais frequente ou a mediana das observações, caso seja numerica, nas demais variáveis.
+```{r}
+#Convertendo as strings em fatores 
+#Encontra as colunas que possuem string
+ind <- sapply(dados, is.character)
+#Converte para fator
+dados[ind] <- lapply(dados[ind], factor)
+
+#Imputando dados- para a categoria mais frequente ou para a mediana caso numerico
+dados <- na.roughfix(dados)
+```
+E agora não há mais NA's nos dados.
+```{r}
+gg_miss_var(dados, show_pct = T) +
+  labs(x = "Variáveis",y = "Porcentagem de NA")
+```
+<h3>Feature engineering</h3>
+Aqui irei criar algumas novas variáveis e aplicar algumas transformações para corrigir alguns problemas na distribuição das mesmas.
+
+Para começar irei criar uma variável com o total de banheiros na casa
+```{r}
+dados <- dados %>%
+  mutate(bathrooms = BsmtFullBath + 0.5*BsmtHalfBath + FullBath + 0.5*HalfBath) %>%
+  select(-c(BsmtFullBath, BsmtHalfBath, FullBath, HalfBath))
+```
+e uma para a área total da casa.
+```{r}
+dados <- dados %>%
+  mutate(TotalSF = X1stFlrSF + X2ndFlrSF + TotalBsmtSF) %>%
+  select(-c(X1stFlrSF, X2ndFlrSF, TotalBsmtSF))
+```
+
+A distribuição da variável resposta SalePrice é bastante assimétrica à direita 
+```{r}
+ggplot(dados, aes(x = SalePrice)) + 
+  geom_density() + theme_bw()
+```
+
+E comparando os quantis da distribuição de SalePrice com os quantis teóricos da distribuição normal, podemos ver que a variável foge bastante da hipótese de normalidade.
+```{r}
+ggplot(dados, aes(sample = SalePrice)) +
+  geom_qq() + geom_qq_line() + theme_bw()
+```
+
+O logaritmo natural parece amenizar bastante o problema da assimetria.
+```{r}
+ggplot(dados, aes(x = log(SalePrice))) + 
+  geom_density() + theme_bw()
+```
+Mas a variável ainda não se adequa a distribuição normal, o que não é um problema para os métodos que irei utilizar.
+```{r}
+ggplot(dados, aes(sample = log(SalePrice))) + 
+  geom_qq() + geom_qq_line() + theme_bw()
+```
+Portanto, manterei a transformação.
+```{r}
+dados <- dados %>%
+  mutate(SalePrice = log(SalePrice))
+```
+Abaixo é mostrado o coeficiente de assmimetria para as demais variáveis numéricas. Algumas delas possuem assimetrias bastante significativas e será necessário aplicar uma transformação para corrigir isto.
+```{r}
+psych::skew(select_if(dados, is.numeric))
+```
+Como essas variáveis possuem zeros ou valores negativos, não será possível aplicar o logaritmo natural como foi com SalePrice, então aplicarei a raiz cúbica de toda variável com assimetria menor que -0.75 ou maior que 0.75.
+```{r}
+ind <- sapply(dados, is.numeric)
+for(i in 1:ncol(dados)){
+  if(ind[i]){
+    if(psych::skew(dados[,i])>0.75 | psych::skew(dados[,i]) < -0.75){
+      dados[,i] = (dados[,i])^(1/3)
+    }
+  }
+}
+```
+O que produziu bons resultados.
+```{r}
+psych::skew(select_if(dados, is.numeric))
+```
+
+<h2>Modelagem</h2>
+Para começar vou dividir os dados em um conjunto de treino, que corresponderá a 80% das observações, e um conjunto de validação com o restante. 
+```{r}
+set.seed(576)
+index = sample(1:dim(dados)[1], 1168, replace = F)
+treino = dados[index,]
+validacao = dados[-index,]
+```
