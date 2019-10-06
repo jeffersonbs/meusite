@@ -6,7 +6,7 @@
     
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-<meta name="description" content="Sobre os dados  Os dados utilizados aqui são provenientes da competição do Kaggle chamada de House prices: Advanced Regression Techniques. O conjunto de dados contêm 80 variáveis explicativas sobre algumas casas em Ames/Iowa. E o objetivo é o de predizer o valor de venda dessas casas.
+<meta name="description" content="Sobre os dados  Os dados utilizados aqui são provenientes da competição do Kaggle chamada de House prices: Advanced Regression Techniques. O conjunto de dados contêm 80 variáveis explicativas sobre algumas casas em Ames/Iowa e o objetivo é o de predizer o valor de venda dessas casas.
 Nesta publicação eu mostrarei o passo a passo da minha análise, mostrado a forma como eu limpei os dados, o feature engineering e a modelagem."/>
 <meta name="keywords" content=""/>
 <meta name="robots" content="noodp"/>
@@ -28,13 +28,13 @@ Nesta publicação eu mostrarei o passo a passo da minha análise, mostrado a fo
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Regressão: predição do preço de casas"/>
-<meta name="twitter:description" content="Sobre os dados  Os dados utilizados aqui são provenientes da competição do Kaggle chamada de House prices: Advanced Regression Techniques. O conjunto de dados contêm 80 variáveis explicativas sobre algumas casas em Ames/Iowa. E o objetivo é o de predizer o valor de venda dessas casas.
+<meta name="twitter:description" content="Sobre os dados  Os dados utilizados aqui são provenientes da competição do Kaggle chamada de House prices: Advanced Regression Techniques. O conjunto de dados contêm 80 variáveis explicativas sobre algumas casas em Ames/Iowa e o objetivo é o de predizer o valor de venda dessas casas.
 Nesta publicação eu mostrarei o passo a passo da minha análise, mostrado a forma como eu limpei os dados, o feature engineering e a modelagem."/>
 
 
 
 <meta property="og:title" content="Regressão: predição do preço de casas" />
-<meta property="og:description" content="Sobre os dados  Os dados utilizados aqui são provenientes da competição do Kaggle chamada de House prices: Advanced Regression Techniques. O conjunto de dados contêm 80 variáveis explicativas sobre algumas casas em Ames/Iowa. E o objetivo é o de predizer o valor de venda dessas casas.
+<meta property="og:description" content="Sobre os dados  Os dados utilizados aqui são provenientes da competição do Kaggle chamada de House prices: Advanced Regression Techniques. O conjunto de dados contêm 80 variáveis explicativas sobre algumas casas em Ames/Iowa e o objetivo é o de predizer o valor de venda dessas casas.
 Nesta publicação eu mostrarei o passo a passo da minha análise, mostrado a forma como eu limpei os dados, o feature engineering e a modelagem." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="/post/regress%C3%A3o-predi%C3%A7%C3%A3o-do-pre%C3%A7o-de-casas/" />
@@ -126,7 +126,7 @@ Nesta publicação eu mostrarei o passo a passo da minha análise, mostrado a fo
       
       <span class="post-author">— Escrito por Jefferson Barbosa</span>
       
-        <span class="post-read-time">— 9 min de leitura</span>
+        <span class="post-read-time">— 12 min de leitura</span>
       
     </div>
 
@@ -138,6 +138,8 @@ Nesta publicação eu mostrarei o passo a passo da minha análise, mostrado a fo
           #<a href="/tags/random-forest/">random forest</a>&nbsp;
         
           #<a href="/tags/gradient-boosting/">gradient boosting</a>&nbsp;
+        
+          #<a href="/tags/vector-machines/">vector machines</a>&nbsp;
         
       </span>
     
@@ -152,8 +154,8 @@ Nesta publicação eu mostrarei o passo a passo da minha análise, mostrado a fo
 <h2>
 Sobre os dados
 </h2>
-<p>Os dados utilizados aqui são provenientes da competição do <a href="kaggle.com">Kaggle</a> chamada de <a href="https://www.kaggle.com/c/house-prices-advanced-regression-techniques/overview">House prices: Advanced Regression Techniques</a>. O conjunto de dados contêm 80 variáveis explicativas sobre algumas casas em Ames/Iowa. E o objetivo é o de predizer o valor de venda dessas casas.</p>
-<p>Nesta publicação eu mostrarei o passo a passo da minha análise, mostrado a forma como eu limpei os dados, o feature engineering e a modelagem. Vou utilizar uma regressão linear como modelo base e irei comparar os resultados com modelos feitos com Random Forest, Stochastic Gradient Boosting e Bayesian. Regularized Neural Networks.</p>
+<p>Os dados utilizados aqui são provenientes da competição do <a href="kaggle.com">Kaggle</a> chamada de <a href="https://www.kaggle.com/c/house-prices-advanced-regression-techniques/overview">House prices: Advanced Regression Techniques</a>. O conjunto de dados contêm 80 variáveis explicativas sobre algumas casas em Ames/Iowa e o objetivo é o de predizer o valor de venda dessas casas.</p>
+<p>Nesta publicação eu mostrarei o passo a passo da minha análise, mostrado a forma como eu limpei os dados, o feature engineering e a modelagem. Vou fazer três modelos e um ensemble, utilizando random forest, stochastic gradient boosting e support vector machines com kernel radial. Os pesos do ensemble serão estimados utilizando um modelo linear e compararei o desempenho dos modelos utilizando o RMSE.</p>
 <h2>
 Processamento dos dados
 </h2>
@@ -272,7 +274,7 @@ dados$PoolQC[which(is.na(dados$PoolQC))] = &quot;Np&quot;
 
 #Fence
 dados$Fence[which(is.na(dados$Fence))] = &quot;Nf&quot;</code></pre>
-<p>O mesmo foi feito com a variável que indica o ano de construção da garagem. Então nestes casos irei atribuir 0.</p>
+<p>O mesmo foi feito com a variável que indica o ano de construção da garagem, então nestes casos irei atribuir 0.</p>
 <pre class="r"><code>dados$GarageYrBlt[which(is.na(dados$GarageYrBlt))] = 0</code></pre>
 <p>As variáveis que indicam a identificação da casa, o mês, ano, tipo e condições da venda não serão uteis para a análise, então irei removê-las.</p>
 <pre class="r"><code>dados &lt;- dados %&gt;%
@@ -304,7 +306,7 @@ dados &lt;- na.roughfix(dados)</code></pre>
 <h3>
 Feature engineering
 </h3>
-<p>Aqui irei criar algumas novas variáveis e aplicar algumas transformações para corrigir alguns problemas na distribuição das mesmas.</p>
+<p>Aqui irei criar algumas novas variáveis e aplicar transformações onde necessário.</p>
 <p>Para começar irei criar uma variável com o total de banheiros na casa</p>
 <pre class="r"><code>dados &lt;- dados %&gt;%
   mutate(bathrooms = BsmtFullBath + 0.5*BsmtHalfBath + FullBath + 0.5*HalfBath) %&gt;%
@@ -356,14 +358,144 @@ for(i in 1:ncol(dados)){
 ## [16] -0.34184538  0.17961125  0.27269050  0.17711218  2.19119203
 ## [21]  7.90825015  3.21481019 14.37182501  6.45735540  0.12108586
 ## [26]  0.26413255  0.23135118</code></pre>
+<p>Por fim ficamos com</p>
+<pre class="r"><code>dim(dados)</code></pre>
+<pre><code>## [1] 1460   70</code></pre>
 <h2>
 Modelagem
 </h2>
-<p>Para começar vou dividir os dados em um conjunto de treino, que corresponderá a 80% das observações, e um conjunto de validação com o restante.</p>
+<p>Para começar vou dividir os dados em um conjunto de treino, que corresponderá a 80% das observações, e um conjunto de validação com o restante e carregar os pacotes necessários nesta etapa.</p>
 <pre class="r"><code>set.seed(576)
 index = sample(1:dim(dados)[1], 1168, replace = F)
 treino = dados[index,]
 validacao = dados[-index,]</code></pre>
+<pre class="r"><code>library(caret)
+library(randomForest)
+library(doMC)
+library(gbm)
+library(kernlab)</code></pre>
+<p>Definindo o número de threads a ser utilizado.</p>
+<pre class="r"><code>registerDoMC(cores = 4)</code></pre>
+Em todos os casos será utilizada a validação cruzada repetida para definir a melhor combinação de hiperparâmetros. Por limitações de poder computacional nem sempre foi possível encontrar a combinação ótima dos hiperpârametros.
+<h3>
+Random Forest
+</h3>
+<p>Para começar irei fazer o tuning do parâmetro mtry do random forest, que representa o número de variáveis que participarão do sorteio na divisão de cada nó nas árvores.</p>
+<pre class="r"><code>control &lt;- trainControl(method = &quot;repeatedcv&quot;, 
+                      number = 10,
+                      repeats = 3)
+
+tunegrid &lt;- expand.grid(.mtry=seq(1,69,1))
+
+model.rf.mtry = train(SalePrice~., data = treino, method = &quot;rf&quot;, tuneGrid=tunegrid, metric=&quot;RMSE&quot;, trControl=control)
+model.rf.mtry</code></pre>
+<pre><code>## Random Forest 
+## 
+## 1168 samples
+##   69 predictor
+## 
+## No pre-processing
+## Resampling: Cross-Validated (10 fold, repeated 3 times) 
+## Summary of sample sizes: 1052, 1051, 1051, 1050, 1051, 1051, ... 
+## Resampling results across tuning parameters:
+## 
+##   mtry  RMSE       Rsquared   MAE       
+##    1    0.3071331  0.7810402  0.22607670
+##    2    0.2254758  0.8143281  0.15783921
+##    3    0.1936032  0.8364856  0.13249279
+##    4    0.1776564  0.8510921  0.12025337
+##    5    0.1681296  0.8607840  0.11323940
+##    6    0.1627488  0.8660263  0.10935524
+##    7    0.1589866  0.8691845  0.10647024
+##    8    0.1557965  0.8725056  0.10420378
+##    9    0.1532778  0.8753523  0.10258097
+##   10    0.1518917  0.8763699  0.10152837
+##   11    0.1501778  0.8782940  0.10051130
+##   12    0.1494971  0.8784993  0.10016042
+##   13    0.1480806  0.8800844  0.09900142
+##   14    0.1476059  0.8802354  0.09867569
+##   15    0.1465570  0.8812828  0.09809760
+##   16    0.1459670  0.8818427  0.09761319
+##   17    0.1450209  0.8827507  0.09696197
+##   18    0.1448914  0.8828137  0.09707160
+##   19    0.1443649  0.8832091  0.09661135
+##   20    0.1435585  0.8842482  0.09592553
+##   21    0.1437793  0.8834199  0.09623241
+##   22    0.1431377  0.8838096  0.09572380
+##   23    0.1425945  0.8845429  0.09538230
+##   24    0.1425120  0.8847815  0.09551756
+##   25    0.1421370  0.8851159  0.09536504
+##   26    0.1422302  0.8846188  0.09531927
+##   27    0.1415267  0.8856568  0.09494621
+##   28    0.1415552  0.8852868  0.09478804
+##   29    0.1412062  0.8856048  0.09469074
+##   30    0.1410151  0.8859585  0.09450404
+##   31    0.1410779  0.8855805  0.09470133
+##   32    0.1409702  0.8854917  0.09438240
+##   33    0.1414394  0.8845036  0.09451632
+##   34    0.1407760  0.8855469  0.09448911
+##   35    0.1405608  0.8856942  0.09432777
+##   36    0.1401718  0.8862803  0.09419182
+##   37    0.1406369  0.8852311  0.09425733
+##   38    0.1406003  0.8851706  0.09423406
+##   39    0.1401908  0.8856175  0.09409481
+##   40    0.1402438  0.8854223  0.09413707
+##   41    0.1401805  0.8855006  0.09398179
+##   42    0.1401042  0.8855886  0.09413101
+##   43    0.1402814  0.8850709  0.09417576
+##   44    0.1404239  0.8849399  0.09444120
+##   45    0.1395261  0.8862789  0.09381134
+##   46    0.1397598  0.8857732  0.09388258
+##   47    0.1397561  0.8856509  0.09394146
+##   48    0.1397801  0.8855166  0.09393174
+##   49    0.1394734  0.8859182  0.09375560
+##   50    0.1399445  0.8849246  0.09416178
+##   51    0.1394826  0.8858094  0.09398916
+##   52    0.1402274  0.8844410  0.09420846
+##   53    0.1397968  0.8852276  0.09417695
+##   54    0.1393756  0.8856854  0.09374741
+##   55    0.1397599  0.8848938  0.09407772
+##   56    0.1395496  0.8853540  0.09412655
+##   57    0.1395353  0.8853507  0.09399841
+##   58    0.1395029  0.8851668  0.09377249
+##   59    0.1393193  0.8853031  0.09380104
+##   60    0.1394579  0.8852845  0.09402501
+##   61    0.1393637  0.8852169  0.09376707
+##   62    0.1396414  0.8847520  0.09406628
+##   63    0.1395461  0.8847076  0.09405419
+##   64    0.1397357  0.8844860  0.09415471
+##   65    0.1396264  0.8846549  0.09398381
+##   66    0.1395992  0.8846408  0.09412881
+##   67    0.1395331  0.8846109  0.09396411
+##   68    0.1392987  0.8848799  0.09394804
+##   69    0.1394037  0.8847799  0.09394884
+## 
+## RMSE was used to select the optimal model using the smallest value.
+## The final value used for the model was mtry = 68.</code></pre>
+<p>Então o melhor valor de mtry é 68. Por fim farei uma busca pelo valor ótimo do número de árvores no modelo fixando o mtry como a raiz quadrada de 69, o número de variáveis.</p>
+<pre class="r"><code>tunegrid &lt;- expand.grid(.mtry = sqrt(ncol(treino)))
+modellist &lt;- list()
+
+for (ntree in c(100,250,500,1000,1500,2000)){
+  set.seed(250)
+  fit &lt;- train(SalePrice~.,
+               data = treino,
+               method = &quot;rf&quot;,
+               metric = &quot;RMSE&quot;,
+               tuneGrid = tunegrid,
+               trControl = control,
+               ntree = ntree)
+  key &lt;- toString(ntree)
+  modellist[[key]] &lt;- fit
+}
+results &lt;- resamples(modellist)
+dotplot(results)</code></pre>
+<p><img src="/post/2019-09-30-regress%C3%A3o-prevendo-o-pre%C3%A7o-de-casas_files/figure-html/unnamed-chunk-29-1.png" width="672" />
+O acréscimo no número de árvores não trouxe melhorias para o modelo, então pelo critério da parcimônia optarei o valor 100. Agora só resta ajustar o modelo final e calcular o RMSE.</p>
+<pre class="r"><code>model.rf.final = randomForest(SalePrice~., data = treino, mtry = 68, ntree = 100)
+rmse.rf.final = RMSE(exp(predict(model.rf.final,validacao)), exp(validacao$SalePrice))
+rmse.rf.final</code></pre>
+<pre><code>## [1] 29332.11</code></pre>
 
     </div>
     

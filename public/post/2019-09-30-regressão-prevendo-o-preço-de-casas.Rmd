@@ -8,14 +8,14 @@ tags:
   - regression
   - random forest
   - gradient boosting
+  - vector machines
 ---  
 
   <h2> Sobre os dados </h2>
   
-  Os dados utilizados aqui são provenientes da competição do [Kaggle](kaggle.com) chamada de [House prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/overview). O conjunto de dados contêm 80 variáveis explicativas sobre algumas casas em Ames/Iowa. E o objetivo é o de predizer o valor de venda dessas casas. 
+  Os dados utilizados aqui são provenientes da competição do [Kaggle](kaggle.com) chamada de [House prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/overview). O conjunto de dados contêm 80 variáveis explicativas sobre algumas casas em Ames/Iowa e o objetivo é o de predizer o valor de venda dessas casas. 
   
-  
-  Nesta publicação eu mostrarei o passo a passo da minha análise, mostrado a forma como eu limpei os dados, o feature engineering e a modelagem. Vou utilizar uma regressão linear como modelo base e irei comparar os resultados com modelos feitos com Random Forest, Stochastic Gradient Boosting e Bayesian. Regularized Neural Networks. 
+  Nesta publicação eu mostrarei o passo a passo da minha análise, mostrado a forma como eu limpei os dados, o feature engineering e a modelagem. Vou fazer três modelos e um ensemble, utilizando random forest, stochastic gradient boosting e support vector machines com kernel radial. Os pesos do ensemble serão estimados utilizando um modelo linear e compararei o desempenho dos modelos utilizando o RMSE.
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = T,
                       results = "hide")
@@ -68,7 +68,7 @@ dados$PoolQC[which(is.na(dados$PoolQC))] = "Np"
 #Fence
 dados$Fence[which(is.na(dados$Fence))] = "Nf"
 ```
-O mesmo foi feito com a variável que indica o ano de construção da garagem. Então nestes casos irei atribuir 0.
+O mesmo foi feito com a variável que indica o ano de construção da garagem, então nestes casos irei atribuir 0.
 
 ```{r}
 dados$GarageYrBlt[which(is.na(dados$GarageYrBlt))] = 0
@@ -111,7 +111,7 @@ gg_miss_var(dados, show_pct = T) +
   labs(x = "Variáveis",y = "Porcentagem de NA")
 ```
 <h3>Feature engineering</h3>
-Aqui irei criar algumas novas variáveis e aplicar algumas transformações para corrigir alguns problemas na distribuição das mesmas.
+Aqui irei criar algumas novas variáveis e aplicar transformações onde necessário.
 
 Para começar irei criar uma variável com o total de banheiros na casa
 ```{r}
@@ -172,12 +172,75 @@ O que produziu bons resultados para a maioria dos casos.
 ```{r, include=T, results='markup'}
 psych::skew(select_if(dados, is.numeric))
 ```
-
+Por fim ficamos com 
+```{r, include=T, results='markup'}
+dim(dados)
+```
 <h2>Modelagem</h2>
-Para começar vou dividir os dados em um conjunto de treino, que corresponderá a 80% das observações, e um conjunto de validação com o restante. 
+Para começar vou dividir os dados em um conjunto de treino, que corresponderá a 80% das observações, e um conjunto de validação com o restante e carregar os pacotes necessários nesta etapa. 
 ```{r}
 set.seed(576)
 index = sample(1:dim(dados)[1], 1168, replace = F)
 treino = dados[index,]
 validacao = dados[-index,]
+```
+```{r,warning=FALSE,message=FALSE}
+library(caret)
+library(randomForest)
+library(doMC)
+library(gbm)
+library(kernlab)
+```
+Definindo o número de threads a ser utilizado.
+```{r}
+registerDoMC(cores = 4)
+```
+Em todos os casos será utilizada a validação cruzada repetida para definir a melhor combinação de hiperparâmetros. Por limitações de poder computacional nem sempre foi possível encontrar a combinação ótima dos hiperpârametros.
+<h3>Random Forest</h3>
+Para começar irei fazer o tuning do parâmetro mtry do random forest, que representa o número de variáveis que participarão do sorteio na divisão de cada nó nas árvores.
+```{r, eval=F}
+control <- trainControl(method = "repeatedcv", 
+                      number = 10,
+                      repeats = 3)
+
+tunegrid <- expand.grid(.mtry=seq(1,69,1))
+
+model.rf.mtry = train(SalePrice~., data = treino, method = "rf", tuneGrid=tunegrid, metric="RMSE", trControl=control)
+model.rf.mtry
+```
+
+```{r,echo=F, results='markup'}
+model.rf.mtry
+```
+Então o melhor valor de mtry é 68. Por fim farei uma busca pelo valor ótimo do número de árvores no modelo fixando o mtry como a raiz quadrada de 69, o número de variáveis.
+```{r, eval=F}
+tunegrid <- expand.grid(.mtry = sqrt(ncol(treino)))
+modellist <- list()
+
+for (ntree in c(100,250,500,1000,1500,2000)){
+  set.seed(250)
+  fit <- train(SalePrice~.,
+               data = treino,
+               method = "rf",
+               metric = "RMSE",
+               tuneGrid = tunegrid,
+               trControl = control,
+               ntree = ntree)
+  key <- toString(ntree)
+  modellist[[key]] <- fit
+}
+results <- resamples(modellist)
+dotplot(results)
+```
+```{r,echo=F, results='markup'}
+dotplot(results)
+```
+O acréscimo no número de árvores não trouxe melhorias para o modelo, então pelo critério da parcimônia optarei o valor 100. Agora só resta ajustar o modelo final e calcular o RMSE.
+```{r, eval=F}
+model.rf.final = randomForest(SalePrice~., data = treino, mtry = 68, ntree = 100)
+rmse.rf.final = RMSE(exp(predict(model.rf.final,validacao)), exp(validacao$SalePrice))
+rmse.rf.final
+```
+```{r,echo=F, results='markup'}
+rmse.rf.final
 ```
