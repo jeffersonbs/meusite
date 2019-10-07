@@ -6,7 +6,7 @@
     <description>Recent content in Tags on Jefferson Barbosa</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Mon, 30 Sep 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 07 Oct 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +14,7 @@
     <item>
       <title>gradient boosting</title>
       <link>/tags/gradient-boosting/</link>
-      <pubDate>Mon, 30 Sep 2019 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 07 Oct 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/gradient-boosting/</guid>
       <description></description>
@@ -23,7 +23,7 @@
     <item>
       <title>random forest</title>
       <link>/tags/random-forest/</link>
-      <pubDate>Mon, 30 Sep 2019 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 07 Oct 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/random-forest/</guid>
       <description></description>
@@ -32,18 +32,18 @@
     <item>
       <title>regression</title>
       <link>/tags/regression/</link>
-      <pubDate>Mon, 30 Sep 2019 00:00:00 +0000</pubDate>
+      <pubDate>Mon, 07 Oct 2019 00:00:00 +0000</pubDate>
       
       <guid>/tags/regression/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>vector machines</title>
-      <link>/tags/vector-machines/</link>
-      <pubDate>Mon, 30 Sep 2019 00:00:00 +0000</pubDate>
+      <title>support vector machines</title>
+      <link>/tags/support-vector-machines/</link>
+      <pubDate>Mon, 07 Oct 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/vector-machines/</guid>
+      <guid>/tags/support-vector-machines/</guid>
       <description></description>
     </item>
     

@@ -1,14 +1,14 @@
 ---
 title: 'Regressão: predição do preço de casas'
 author: Jefferson Barbosa
-date: '2019-09-30'
+date: '2019-10-07'
 slug: regressão-predição-do-preço-de-casas
 categories: []
 tags:
   - regression
   - random forest
   - gradient boosting
-  - vector machines
+  - support vector machines
 ---  
 
   <h2> Sobre os dados </h2>
@@ -40,7 +40,7 @@ O conjunto de dados conta com 1460 observações e 80 variáveis explicativas.
 ```{r, include=T, results='markup'}
 str(dados)
 ```
-Olhando a descrição dos dados, vi que em algumas variáveis foi atribuido NA quando o elemento não estava presente. Irei alterar para uma string, tornando assim as observações úteis para a análise.
+Olhando a descrição dos dados, vi que em algumas variáveis foi atribuído NA quando o elemento não estava presente. Irei alterar para uma string, tornando assim as observações úteis para a análise.
 
 ```{r}
 #Alley
@@ -78,7 +78,7 @@ As variáveis que indicam a identificação da casa, o mês, ano, tipo e condiç
 dados <- dados %>%
   select(-c(MoSold, YrSold, SaleType, SaleCondition, Id))
 ```
-E em algumas variáveis categoricas o nível foi descrito por um número, portanto será necessário converter para uma string.
+E em algumas variáveis categóricas o nível foi descrito por um número, portanto será necessário converter para uma string.
 ```{r}
 dados$MSSubClass = as.character(dados$MSSubClass)
 dados$OverallQual = as.character(dados$OverallQual)
@@ -143,7 +143,7 @@ O logaritmo natural parece amenizar bastante o problema da assimetria.
 ggplot(dados, aes(x = log(SalePrice))) + 
   geom_density() + theme_bw()
 ```
-Mas apesar de estar bem mais próxima de uma gaussiana, a variável ainda não se adequa a distribuição normal, o que não é um problema para os métodos que irei utilizar.
+Mas apesar de estar bem mais próxima de uma gaussiana, a variável ainda não se adéqua a distribuição normal, o que não é um problema para os métodos que irei utilizar.
 ```{r}
 ggplot(dados, aes(sample = log(SalePrice))) + 
   geom_qq() + geom_qq_line() + theme_bw()
@@ -153,7 +153,7 @@ Portanto, manterei a transformação.
 dados <- dados %>%
   mutate(SalePrice = log(SalePrice))
 ```
-Abaixo é mostrado o coeficiente de assmimetria para as demais variáveis numéricas. Algumas delas possuem assimetrias bastante significativas e será necessário aplicar uma transformação para corrigir isto.
+Abaixo é mostrado o coeficiente de assimetria para as demais variáveis numéricas. Algumas delas possuem assimetrias bastante significativas e será necessário aplicar uma transformação para corrigir isto.
 ```{r, include=T, results='markup'}
 psych::skew(select_if(dados, is.numeric))
 ```
@@ -172,7 +172,7 @@ O que produziu bons resultados para a maioria dos casos.
 ```{r, include=T, results='markup'}
 psych::skew(select_if(dados, is.numeric))
 ```
-Por fim ficamos com 
+Por fim ficamos com 69 variáveis e as mesmas 1460 observações.
 ```{r, include=T, results='markup'}
 dim(dados)
 ```
@@ -235,7 +235,7 @@ dotplot(results)
 ```{r,echo=F, results='markup'}
 dotplot(results)
 ```
-O acréscimo no número de árvores não trouxe melhorias para o modelo, então pelo critério da parcimônia optarei o valor 100. Agora só resta ajustar o modelo final e calcular o RMSE.
+O acréscimo no número de árvores não trouxe melhorias para o modelo, então pelo critério da parcimônia optarei por utilizar 100 árvores. Agora só resta ajustar o modelo final e calcular o RMSE.
 ```{r, eval=F}
 model.rf.final = randomForest(SalePrice~., data = treino, mtry = 68, ntree = 100)
 rmse.rf.final = RMSE(exp(predict(model.rf.final,validacao)), exp(validacao$SalePrice))
@@ -244,3 +244,98 @@ rmse.rf.final
 ```{r,echo=F, results='markup'}
 rmse.rf.final
 ```
+<h3>Support Vector Machine</h3>
+No support vector machine eu usarei o kernel radial e terei dois principais parâmetros para tunar. 
+```{r, eval=F}
+control <- trainControl(method = 'repeatedcv',
+                        number = 10,
+                        repeats = 3)
+svmRadialGrid <- expand.grid(C = seq(1, 5, by=1),
+                             sigma = seq(0.01, 0.2, by=0.01))
+
+model.SvmRadial <- train(SalePrice~., data = treino, 
+                     method = "svmRadial", 
+                     trControl = control, 
+                     metric = "RMSE", tuneGrid = svmRadialGrid)
+model.SvmRadial
+```
+```{r,echo=F, results='markup'}
+model.SvmRadial
+```
+Agora ajustando o modelo final para C=2 e sigma=0.01 e calculando o RMSE.
+```{r, eval=F}
+svm.final <- ksvm(SalePrice~., data = treino, C = 2, sigma = 0.01)
+rmse.svm.final <- RMSE(exp(predict(svm.final, validacao)), exp(validacao$SalePrice))
+rmse.svm.final <- RMSE(exp(predict(model.svm.final, validacao)),exp(validacao$SalePrice))
+rmse.svm.final
+```
+```{r,echo=F, results='markup'}
+rmse.svm.final
+```
+<h3>Stochastic Gradient Boosting</h3>
+No stochastic gradient boosting temos 4 hiperparâmetros para tunar.
+```{r, eval=F}
+gbmGrid <-  gbmGrid <-  expand.grid(interaction.depth = c(4, 8, 12), 
+                                    n.trees = (1:15)*25, 
+                                    shrinkage = c(.01, .1, .3),
+                                    n.minobsinnode = c(8, 12))
+
+model.gbm = train(SalePrice~., data = treino, method = "gbm",
+              distribution = "gaussian",
+              trControl = control,
+              tuneGrid = gbmGrid,
+              verbose = F)
+model.gbm
+```
+```{r,echo=F, results='markup'}
+model.gbm
+```
+Agora só falta ajustar o modelo final utilizando a combinação de hiperparâmetros que obteve o melhor desempenho. 
+```{r, eval=F}
+model.gbm.final <- gbm(SalePrice ~ ., data = treino, 
+                       distribution = "gaussian", 
+                       n.trees = 100, 
+                       shrinkage = 0.1, 
+                       interaction.depth = 12, 
+                       n.minobsinnode = 12)
+
+rmse.gbm <- RMSE(exp(predict(model.gbm.final,validacao, n.trees = 100)), exp(validacao$SalePrice))
+rmse.gbm
+```
+```{r,echo=F, results='markup'}
+rmse.gbm
+```
+<h3>Ensemble</h3>
+Para fazer o ensemble eu vou utilizar um modelo linear para estimar os pesos do modelo. Primeiro eu vou criar um outro data frame contendo as previsões de cada modelo estimado até aqui.
+```{r}
+ensemble.data.frame <- data.frame(SalePrice = treino$SalePrice, randomforest = predict(model.rf.final,treino), 
+                                  gbm =predict(model.gbm.final,treino, n.trees = 100),
+                                  svm = predict(model.svm.final, treino))
+```
+Agora ajustar o modelo 
+```{r, eval=F}
+model.lm <- lm(SalePrice~randomforest+gbm+svm+0, data= ensemble.data.frame)
+summary(model.lm)
+```
+```{r,echo=F, results='markup'}
+summary(model.lm)
+```
+e calcular o RMSE utilizando os pesos estimados.
+```{r, eval=F}
+rmse.ensemble <- RMSE(0.84983*exp(predict(model.rf.final, validacao))+ 
+       0.24081*exp(predict(model.gbm.final, validacao, n.trees = 100)) -
+       0.09075*exp(predict(model.svm.final, validacao)), exp(validacao$SalePrice))
+rmse.ensemble
+```
+```{r,echo=F, results='markup'}
+rmse.ensemble
+```
+<h2>Conclusão</h2>
+Eu estimei três modelos e fiz um ensemble entre eles. Na tabela abaixo eu mostro o RMSE calculado em cada cenário.
+```{r,echo=F, results='markup'}
+tabela <- matrix(c(rmse.rf.final, rmse.svm.final,rmse.gbm, rmse.ensemble), ncol=1)
+row.names(tabela) <- c("Random Forest", "Support Vector Machine", "Stochastic Gradient Boosting", "Ensemble")
+colnames(tabela) <- c("RMSE")
+tabela
+```
+O stochastic gradient boosting foi o modelo com melhor desempenho, seguido pelo ensemble e pelo Random Forest. Não consegui obter um bom desempenho com o support vector machine. Talvez com um melhor tuning dos parâmetros possa se obter melhor desempenho do método, mas o meu atual poder computacional não permite que eu teste um grid muito grande de valores. 
