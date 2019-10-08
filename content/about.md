@@ -12,4 +12,4 @@ Me interesso principalmente pela análise multivariada, especialmente pelo model
 
 O objetivo deste site é o de mostrar minhas habilidades em ciência de dados. 
 
-Para entar em contato comigo pode enviar e-mail para jeffersonbarbosa.rn@gmail.com, acessar meu [linkedin](https://www.linkedin.com/in/jeffersonbarbosas/) ou minha página no [Kaggle](https://www.kaggle.com/jeffersonbs).
+Para entrar em contato comigo pode enviar e-mail para jeffersonbarbosa.rn@gmail.com, acessar meu [linkedin](https://www.linkedin.com/in/jeffersonbarbosas/) ou minha página no [Kaggle](https://www.kaggle.com/jeffersonbs).

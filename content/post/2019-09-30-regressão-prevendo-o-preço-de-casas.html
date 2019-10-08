@@ -113,38 +113,38 @@ library(randomForest)</code></pre>
 ##  $ SalePrice    : int  208500 181500 223500 140000 250000 143000 307000 200000 129900 118000 ...</code></pre>
 <p>Olhando a descrição dos dados, vi que em algumas variáveis foi atribuído NA quando o elemento não estava presente. Irei alterar para uma string, tornando assim as observações úteis para a análise.</p>
 <pre class="r"><code>#Alley
-dados$Alley[which(is.na(dados$Alley))] = &quot;Naa&quot;
+dados$Alley[which(is.na(dados$Alley))] &lt;- &quot;Naa&quot;
 
 #Basement
-dados$BsmtQual[which(is.na(dados$BsmtQual))] = &quot;Nb&quot;
-dados$BsmtCond[which(is.na(dados$BsmtCond))] = &quot;Nb&quot;
-dados$BsmtExposure[which(is.na(dados$BsmtExposure))] = &quot;Nb&quot;
-dados$BsmtFinType1[which(is.na(dados$BsmtFinType1))] = &quot;Nb&quot;
-dados$BsmtFinType2[which(is.na(dados$BsmtFinType2))] = &quot;Nb&quot;
+dados$BsmtQual[which(is.na(dados$BsmtQual))] &lt;- &quot;Nb&quot;
+dados$BsmtCond[which(is.na(dados$BsmtCond))] &lt;- &quot;Nb&quot;
+dados$BsmtExposure[which(is.na(dados$BsmtExposure))] &lt;- &quot;Nb&quot;
+dados$BsmtFinType1[which(is.na(dados$BsmtFinType1))] &lt;- &quot;Nb&quot;
+dados$BsmtFinType2[which(is.na(dados$BsmtFinType2))] &lt;- &quot;Nb&quot;
 
 #Fireplace
-dados$FireplaceQu[which(is.na(dados$FireplaceQu))] = &quot;Nf&quot;
+dados$FireplaceQu[which(is.na(dados$FireplaceQu))] &lt;- &quot;Nf&quot;
 
 #Garage
-dados$GarageType[which(is.na(dados$GarageType))] = &quot;Ng&quot;
-dados$GarageFinish[which(is.na(dados$GarageFinish))] = &quot;Ng&quot;
-dados$GarageQual[which(is.na(dados$GarageQual))] = &quot;Ng&quot;
-dados$GarageCond[which(is.na(dados$GarageCond))] = &quot;Ng&quot;
+dados$GarageType[which(is.na(dados$GarageType))] &lt;- &quot;Ng&quot;
+dados$GarageFinish[which(is.na(dados$GarageFinish))] &lt;- &quot;Ng&quot;
+dados$GarageQual[which(is.na(dados$GarageQual))] &lt;- &quot;Ng&quot;
+dados$GarageCond[which(is.na(dados$GarageCond))] &lt;- &quot;Ng&quot;
 
 #Pool
-dados$PoolQC[which(is.na(dados$PoolQC))] = &quot;Np&quot;
+dados$PoolQC[which(is.na(dados$PoolQC))] &lt;- &quot;Np&quot;
 
 #Fence
-dados$Fence[which(is.na(dados$Fence))] = &quot;Nf&quot;</code></pre>
+dados$Fence[which(is.na(dados$Fence))] &lt;- &quot;Nf&quot;</code></pre>
 <p>O mesmo foi feito com a variável que indica o ano de construção da garagem, então nestes casos irei atribuir 0.</p>
-<pre class="r"><code>dados$GarageYrBlt[which(is.na(dados$GarageYrBlt))] = 0</code></pre>
+<pre class="r"><code>dados$GarageYrBlt[which(is.na(dados$GarageYrBlt))] &lt;- 0</code></pre>
 <p>As variáveis que indicam a identificação da casa, o mês, ano, tipo e condições da venda não serão uteis para a análise, então irei removê-las.</p>
 <pre class="r"><code>dados &lt;- dados %&gt;%
   select(-c(MoSold, YrSold, SaleType, SaleCondition, Id))</code></pre>
 <p>E em algumas variáveis categóricas o nível foi descrito por um número, portanto será necessário converter para uma string.</p>
-<pre class="r"><code>dados$MSSubClass = as.character(dados$MSSubClass)
-dados$OverallQual = as.character(dados$OverallQual)
-dados$OverallCond = as.character(dados$OverallCond)</code></pre>
+<pre class="r"><code>dados$MSSubClass &lt;- as.character(dados$MSSubClass)
+dados$OverallQual &lt;- as.character(dados$OverallQual)
+dados$OverallCond &lt;- as.character(dados$OverallCond)</code></pre>
 <p>O gráfico abaixo mostra a porcentagem de NA’s em cada variável.</p>
 <pre class="r"><code>gg_miss_var(dados, show_pct = T) +
   labs(x = &quot;Variáveis&quot;,y = &quot;Porcentagem de NA&quot;)</code></pre>
@@ -208,7 +208,7 @@ Portanto, manterei a transformação.</p>
 for(i in 1:ncol(dados)){
   if(ind[i]){
     if(psych::skew(dados[,i])&gt;0.75 | psych::skew(dados[,i]) &lt; -0.75){
-      dados[,i] = (dados[,i])^(1/3)
+      dados[,i] &lt;- (dados[,i])^(1/3)
     }
   }
 }</code></pre>
@@ -228,9 +228,9 @@ Modelagem
 </h2>
 <p>Para começar vou dividir os dados em um conjunto de treino, que corresponderá a 80% das observações, e um conjunto de validação com o restante e carregar os pacotes necessários nesta etapa.</p>
 <pre class="r"><code>set.seed(576)
-index = sample(1:dim(dados)[1], 1168, replace = F)
-treino = dados[index,]
-validacao = dados[-index,]</code></pre>
+index &lt;- sample(1:dim(dados)[1], 1168, replace = F)
+treino &lt;- dados[index,]
+validacao &lt;- dados[-index,]</code></pre>
 <pre class="r"><code>library(caret)
 library(randomForest)
 library(doMC)
@@ -249,7 +249,7 @@ Random Forest
 
 tunegrid &lt;- expand.grid(.mtry=seq(1,69,1))
 
-model.rf.mtry = train(SalePrice~., data = treino, method = &quot;rf&quot;, tuneGrid=tunegrid, metric=&quot;RMSE&quot;, trControl=control)
+model.rf.mtry &lt;- train(SalePrice~., data = treino, method = &quot;rf&quot;, tuneGrid=tunegrid, metric=&quot;RMSE&quot;, trControl = control)
 model.rf.mtry</code></pre>
 <pre><code>## Random Forest 
 ## 
@@ -354,8 +354,8 @@ results &lt;- resamples(modellist)
 dotplot(results)</code></pre>
 <p><img src="/post/2019-09-30-regress%C3%A3o-prevendo-o-pre%C3%A7o-de-casas_files/figure-html/unnamed-chunk-29-1.png" width="672" />
 O acréscimo no número de árvores não trouxe melhorias para o modelo, então pelo critério da parcimônia optarei por utilizar 100 árvores. Agora só resta ajustar o modelo final e calcular o RMSE.</p>
-<pre class="r"><code>model.rf.final = randomForest(SalePrice~., data = treino, mtry = 68, ntree = 100)
-rmse.rf.final = RMSE(exp(predict(model.rf.final,validacao)), exp(validacao$SalePrice))
+<pre class="r"><code>model.rf.final &lt;- randomForest(SalePrice~., data = treino, mtry = 68, ntree = 100)
+rmse.rf.final &lt;- RMSE(exp(predict(model.rf.final,validacao)), exp(validacao$SalePrice))
 rmse.rf.final</code></pre>
 <pre><code>## [1] 29332.11</code></pre>
 <h3>
@@ -497,12 +497,12 @@ rmse.svm.final</code></pre>
 Stochastic Gradient Boosting
 </h3>
 <p>No stochastic gradient boosting temos 4 hiperparâmetros para tunar.</p>
-<pre class="r"><code>gbmGrid &lt;-  gbmGrid &lt;-  expand.grid(interaction.depth = c(4, 8, 12), 
+<pre class="r"><code>gbmGrid &lt;- expand.grid(interaction.depth = c(4, 8, 12), 
                                     n.trees = (1:15)*25, 
                                     shrinkage = c(.01, .1, .3),
                                     n.minobsinnode = c(8, 12))
 
-model.gbm = train(SalePrice~., data = treino, method = &quot;gbm&quot;,
+model.gbm &lt;- train(SalePrice~., data = treino, method = &quot;gbm&quot;,
               distribution = &quot;gaussian&quot;,
               trControl = control,
               tuneGrid = gbmGrid,
