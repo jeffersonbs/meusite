@@ -10,7 +10,13 @@ tags:
   - gradient boosting
   - support vector machines
 ---  
-
+<style>
+pre {
+  white-space: pre !important;
+  overflow-y: scroll !important;
+  max-height: 50vh !important;
+}
+</style>
   <h2> Sobre os dados </h2>
   
   Os dados utilizados aqui são provenientes da competição do [Kaggle](kaggle.com) chamada de [House prices: Advanced Regression Techniques](https://www.kaggle.com/c/house-prices-advanced-regression-techniques/overview). O conjunto de dados contêm 80 variáveis explicativas sobre algumas casas em Ames/Iowa e o objetivo é o de predizer o valor de venda dessas casas. 
@@ -19,6 +25,7 @@ tags:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = T,
                       results = "hide")
+options(width=100)
 ```
 
 ```{r, include=F}
