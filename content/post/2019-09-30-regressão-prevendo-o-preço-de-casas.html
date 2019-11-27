@@ -13,6 +13,11 @@ tags:
 
 
 
+<h2>
+Sobre os dados
+</h2>
+<p>Os dados utilizados aqui são provenientes da competição do <a href="kaggle.com">Kaggle</a> chamada de <a href="https://www.kaggle.com/c/house-prices-advanced-regression-techniques/overview">House prices: Advanced Regression Techniques</a>. O conjunto de dados contêm 80 variáveis explicativas sobre algumas casas em Ames/Iowa e o objetivo é o de predizer o valor de venda dessas casas.</p>
+Nesta publicação eu mostrarei o passo a passo da minha análise, mostrado a forma como eu limpei os dados, o feature engineering e a modelagem. Vou fazer três modelos e um ensemble, utilizando random forest, stochastic gradient boosting e support vector machines com kernel radial. Os pesos do ensemble serão estimados utilizando um modelo linear e compararei o desempenho dos modelos utilizando o RMSE.
 <style>
 pre {
   white-space: pre !important;
@@ -20,11 +25,6 @@ pre {
   max-height: 50vh !important;
 }
 </style>
-<h2>
-Sobre os dados
-</h2>
-<p>Os dados utilizados aqui são provenientes da competição do <a href="kaggle.com">Kaggle</a> chamada de <a href="https://www.kaggle.com/c/house-prices-advanced-regression-techniques/overview">House prices: Advanced Regression Techniques</a>. O conjunto de dados contêm 80 variáveis explicativas sobre algumas casas em Ames/Iowa e o objetivo é o de predizer o valor de venda dessas casas.</p>
-<p>Nesta publicação eu mostrarei o passo a passo da minha análise, mostrado a forma como eu limpei os dados, o feature engineering e a modelagem. Vou fazer três modelos e um ensemble, utilizando random forest, stochastic gradient boosting e support vector machines com kernel radial. Os pesos do ensemble serão estimados utilizando um modelo linear e compararei o desempenho dos modelos utilizando o RMSE.</p>
 <h2>
 Processamento dos dados
 </h2>
