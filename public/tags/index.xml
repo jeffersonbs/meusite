@@ -6,10 +6,37 @@
     <description>Recent content in Tags on Jefferson Barbosa</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Mon, 07 Oct 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 05 Dec 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>kmeans</title>
+      <link>/tags/kmeans/</link>
+      <pubDate>Thu, 05 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/kmeans/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>kmedoids</title>
+      <link>/tags/kmedoids/</link>
+      <pubDate>Thu, 05 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/kmedoids/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>unsupervised</title>
+      <link>/tags/unsupervised/</link>
+      <pubDate>Thu, 05 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/tags/unsupervised/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>gradient boosting</title>

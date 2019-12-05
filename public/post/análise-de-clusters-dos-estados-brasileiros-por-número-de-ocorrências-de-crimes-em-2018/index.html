@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+      <title>Análise de clusters dos estados brasileiros por número de ocorrências de crimes em 2018 :: Jefferson Barbosa — Portfólio</title>
+    
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+<meta name="description" content="Com os altos índices de violência do Brasil, me interessei por analisar como os estados se assemelham em relação ao número de ocorrências de crimes. Para isso peguei os dados disponíveis no site do ministério da justiça e segurança pública, com o número absoluto de ocorrências de 9 crimes nos 26 estados e no distrito federal: estupro, furto de veículo, homicídio doloso, lesão corporal seguida de morte, roubo a instituição financeira, roubo de carga, roubo de veículo latrocínio e tentativa de homicídio."/>
+<meta name="keywords" content=""/>
+<meta name="robots" content="noodp"/>
+<link rel="canonical" href="/post/an%C3%A1lise-de-clusters-dos-estados-brasileiros-por-n%C3%BAmero-de-ocorr%C3%AAncias-de-crimes-em-2018/" />
+
+
+
+
+
+<link rel="stylesheet" href="/assets/style.css">
+
+
+<link rel="stylesheet" href="/style.css">
+
+
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/img/apple-touch-icon-144-precomposed.png">
+<link rel="shortcut icon" href="/img/favicon.png">
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Análise de clusters dos estados brasileiros por número de ocorrências de crimes em 2018"/>
+<meta name="twitter:description" content="Com os altos índices de violência do Brasil, me interessei por analisar como os estados se assemelham em relação ao número de ocorrências de crimes. Para isso peguei os dados disponíveis no site do ministério da justiça e segurança pública, com o número absoluto de ocorrências de 9 crimes nos 26 estados e no distrito federal: estupro, furto de veículo, homicídio doloso, lesão corporal seguida de morte, roubo a instituição financeira, roubo de carga, roubo de veículo latrocínio e tentativa de homicídio."/>
+
+
+
+<meta property="og:title" content="Análise de clusters dos estados brasileiros por número de ocorrências de crimes em 2018" />
+<meta property="og:description" content="Com os altos índices de violência do Brasil, me interessei por analisar como os estados se assemelham em relação ao número de ocorrências de crimes. Para isso peguei os dados disponíveis no site do ministério da justiça e segurança pública, com o número absoluto de ocorrências de 9 crimes nos 26 estados e no distrito federal: estupro, furto de veículo, homicídio doloso, lesão corporal seguida de morte, roubo a instituição financeira, roubo de carga, roubo de veículo latrocínio e tentativa de homicídio." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/post/an%C3%A1lise-de-clusters-dos-estados-brasileiros-por-n%C3%BAmero-de-ocorr%C3%AAncias-de-crimes-em-2018/" />
+<meta property="article:published_time" content="2019-12-05T00:00:00+00:00" />
+<meta property="article:modified_time" content="2019-12-05T00:00:00+00:00" /><meta property="og:site_name" content="Jefferson Barbosa" />
+
+
+
+
+
+
+  </head>
+  <body class="">
+    <div class="container">
+      <header class="header">
+  <span class="header__inner">
+    <a href="/" class="logo" style="text-decoration: none;">
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367"/>
+</svg>
+</span>
+    <span class="logo__text">Jefferson Barbosa</span>
+    <span class="logo__cursor"></span>
+  
+</a>
+
+    <span class="header__right">
+      
+        <nav class="menu">
+  <ul class="menu__inner menu__inner--desktop">
+    
+      
+        
+          <li><a href="/about">Sobre</a></li>
+        
+      
+      
+    
+  </ul>
+
+  <ul class="menu__inner menu__inner--mobile">
+    
+      
+        <li><a href="/about">Sobre</a></li>
+      
+    
+  </ul>
+</nav>
+
+        <span class="menu-trigger">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M0 0h24v24H0z" fill="none"/>
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+          </svg>
+        </span>
+      
+      <span class="theme-toggle">
+        <svg class="theme-toggler" width="24" height="24" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M22 41C32.4934 41 41 32.4934 41 22C41 11.5066 32.4934 3 22
+  3C11.5066 3 3 11.5066 3 22C3 32.4934 11.5066 41 22 41ZM7 22C7
+  13.7157 13.7157 7 22 7V37C13.7157 37 7 30.2843 7 22Z"/>
+</svg>
+
+      </span>
+    </span>
+  </span>
+</header>
+
+
+      <div class="content">
+        
+  <div class="post">
+    <h2 class="post-title"><a href="/post/an%C3%A1lise-de-clusters-dos-estados-brasileiros-por-n%C3%BAmero-de-ocorr%C3%AAncias-de-crimes-em-2018/">Análise de clusters dos estados brasileiros por número de ocorrências de crimes em 2018</a></h2>
+    
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-149326010-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-149326010-1');
+</script>
+    <div class="post-meta">
+      
+        <span class="post-date">
+            2019-12-05
+        </span>
+      
+      <span class="post-author">— Escrito por Jefferson Barbosa</span>
+      
+        <span class="post-read-time">— 7 min de leitura</span>
+      
+    </div>
+
+    
+      <span class="post-tags">
+        
+          #<a href="/tags/unsupervised/">unsupervised</a>&nbsp;
+        
+          #<a href="/tags/kmeans/">kmeans</a>&nbsp;
+        
+          #<a href="/tags/kmedoids/">kmedoids</a>&nbsp;
+        
+      </span>
+    
+
+    
+
+    <div class="post-content">
+      
+
+
+Com os altos índices de violência do Brasil, me interessei por analisar como os estados se assemelham em relação ao número de ocorrências de crimes. Para isso peguei os dados disponíveis no site do ministério da justiça e segurança pública, com o número absoluto de ocorrências de 9 crimes nos 26 estados e no distrito federal: estupro, furto de veículo, homicídio doloso, lesão corporal seguida de morte, roubo a instituição financeira, roubo de carga, roubo de veículo latrocínio e tentativa de homicídio. E para tornar os números comparáveis calculei a taxa por 100 mil habitantes.
+<style>
+pre {
+  white-space: pre !important;
+  overflow-y: scroll !important;
+  max-height: 50vh !important;
+}
+</style>
+<pre class="r"><code>dados</code></pre>
+<pre><code>##                       Estupro Furto.de.veiculo Homicídio.doloso Lesão.corporal.seguida.de.morte Roubo.a.instituição.financeira Roubo.de.carga Roubo.de.veiculo Latrocínio Tentaiva.de.homicídio
+## Acre                29.910327         80.98796        45.555728                       0.0000000                      0.3451192      0.0000000        124.24289  2.3007943              9.893416
+## Alagoas             13.693188         34.84992        40.086433                       0.2407594                      0.6620882      2.5279732        104.57984  1.1135120             13.241765
+## Amazonas            20.585153         55.18781        25.755947                       0.5636411                      2.8917238      0.1225307         75.47889  1.2988251              6.053015
+## Amapá               34.358296         87.04102        34.478851                       3.9783290                      1.6877759      0.0000000         64.73826  3.9783290             12.417209
+## Bahia               19.341619         35.21997        35.091706                       0.4590681                      0.0000000      2.0185495         88.76892  0.9046342             17.073283
+## Ceará               18.092370         46.10139        46.090368                       0.3525919                      0.4517583      2.6885130        102.68136  0.5178693             13.916360
+## Distrito Federal    22.153472        164.31893        14.690542                       0.2353176                      0.1008504      1.8489241        133.18977  0.9412704             28.305347
+## Espírito Santo      12.108586        103.23765        27.892542                       0.2517377                      0.5789968      0.3272591        109.02762  0.8559083             54.425701
+## Goiás                9.535972        146.57945        29.055819                       0.9247004                      0.4334533      5.7793772        124.38665  1.2136692             28.434536
+## Maranhão            16.901076         42.35930        22.984895                       0.1990034                      0.5401521      0.5259376         58.18007  1.0092316             15.010544
+## Minas Gerais         6.976967        101.71258        14.010966                       0.2756567                      0.4324959      2.4951686         45.25523  0.3849689             16.743770
+## Mato Grosso do Sul  58.696743        134.20557        15.320105                       0.2547286                      0.3638980      0.0000000         28.89350  0.8369653             24.999791
+## Mato Grosso         48.692649         70.83095        26.612450                       0.7553752                      0.2614760      0.5229521         55.05523  1.0459042             35.706006
+## Pará                40.418174         49.35692        41.768970                       0.1879369                      0.3406356      1.3155581         77.41825  2.2082583             19.604165
+## Paraíba              6.130370         44.73919        29.300667                       0.1251096                      1.6764686      1.2010521         95.93404  0.8257233              4.528967
+## Pernambuco          20.376370         56.72739        40.184097                       0.1684868                      0.2737910      5.9602198        161.39981  1.2320596             35.319041
+## Piauí               20.676783         98.14580        17.215337                       0.2450582                      0.2144259      0.8883359        118.85321  1.4090845             17.276601
+## Paraná              54.472062        155.01892        12.758904                       0.4141357                      0.2114736      6.1239216         69.36332  0.4670041              5.366141
+## Rio de Janeiro      27.520694         91.32888        26.687883                       0.3432409                      0.4449894     54.2340425        304.22827  0.9790233             22.994284
+## Rio Grande do Norte  3.133075         29.97979        40.816209                       7.1284647                      0.4311571      0.4886448        200.68928  3.1043314              2.155786
+## Rondônia            58.261630        142.97996        23.213618                       0.0000000                      0.0000000      0.0000000         98.08892  0.9103380             41.818650
+## Roraima             39.024018        110.30789        57.235226                       1.2140806                      1.0406405      0.0000000         91.74980  2.2547210             25.842572
+## Rio Grande do Sul   14.598920        121.40759        17.635213                       0.2647930                      0.4148424      3.3893503        140.58743  0.7149411             25.826143
+## Santa Catarina      18.019943        129.07933        10.543433                       0.2967991                      0.3533322      2.1341266         31.36177  0.5511983             19.051673
+## Sergipe             25.808626         34.06036        41.522042                       0.2633533                      0.0000000      0.0000000        115.83157  1.4045511             24.228506
+## São Paulo           26.239085        214.43848         6.475777                       0.1756738                      0.1185798     19.1879758        128.14309  0.5928992              7.650596
+## Tocantins           46.745528        134.51395        24.562299                       0.5143937                      0.4500945      0.0000000         70.15044  0.9644882             26.812772</code></pre>
+<p>Porém encontrei alguns problemas com os dados. O estado do Rio de Janeiro não publicou dados para o mês de outubro e vários estados não publicaram dados sobre roubos a instituição financeira e sobre roubos de carga. Para a primeira situação eu julguei válido imputar a média dos demais meses a fim de viabilizar a análise e comprometer o mínimo os resultados. Já para a segunda situação eu julguei que seria melhor não incluir as variáveis.</p>
+<p>Nesta análise utilizarei a padronização das variáveis.</p>
+<pre class="r"><code>dados2 &lt;- scale(dados[,-c(5,6)], center = TRUE, scale = TRUE)</code></pre>
+<p>E utilizarei os seguintes pacotes:</p>
+<pre class="r"><code>library(clustertend)
+library(factoextra)
+library(NbClust)
+library(cluster)</code></pre>
+<div id="tendencia-de-agrupamento" class="section level3">
+<h3>Tendência de agrupamento</h3>
+<p>Como os métodos de agrupamento impõe grupos mesmo quando os dados são gerados de maneira aleatória, então é necessário verificar se o conjunto de dados possui grupos significativos. Para isso utilizarei a estatística de Hopkins. O método consiste em comparar os dados a uma amostra aleatória de uma variável aleatória com distribuição uniforme. Um valor da estatística menor que 0.5 indica que os dados são agrupáveis.</p>
+<pre class="r"><code>set.seed(125)
+hopkins(dados2, n = nrow(dados2) - 1)</code></pre>
+<pre><code>## $H
+## [1] 0.3055777</code></pre>
+<p>O valor de H = 0.30 indica que o conjunto de dados é altamente agrupável.</p>
+</div>
+<div id="k-means" class="section level3">
+<h3>K-means</h3>
+<p>Para utilizar o k-means é necessário primeiro definir o número de grupos que o método irá formar. Para isto utilizei as técnicas do cotovelo e o da largura média de silhueta.</p>
+<pre class="r"><code>fviz_nbclust(dados2, kmeans, method = &quot;wss&quot;) +
+  geom_vline(xintercept = 4, linetype = 2)+
+  labs(subtitle = &quot;Elbow method&quot;)</code></pre>
+<p><img src="/post/2019-11-27-an%C3%A1lise-de-clusters-dos-estados-brasileiros-por-n%C3%BAmero-de-ocorr%C3%AAncias-de-crimes-em-2018_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<pre class="r"><code>fviz_nbclust(dados2, kmeans, method = &quot;silhouette&quot;)+
+  labs(subtitle = &quot;Silhouette method&quot;)</code></pre>
+<p><img src="/post/2019-11-27-an%C3%A1lise-de-clusters-dos-estados-brasileiros-por-n%C3%BAmero-de-ocorr%C3%AAncias-de-crimes-em-2018_files/figure-html/unnamed-chunk-6-2.png" width="672" />
+Nas duas técnicas há evidências de que o número adequado de grupos deve ser quatro. Portanto irei fazer o k-means utilizando quatro grupos.</p>
+<pre class="r"><code>km &lt;- eclust(dados2, &quot;kmeans&quot;, k = 4, nstart = 50, graph = FALSE)
+fviz_cluster(km, data = dados2,
+             ellipse.type = &quot;euclid&quot;, 
+             star.plot = TRUE, 
+             repel = TRUE,
+             ggtheme = theme_minimal())</code></pre>
+<pre><code>## Too few points to calculate an ellipse</code></pre>
+<p><img src="/post/2019-11-27-an%C3%A1lise-de-clusters-dos-estados-brasileiros-por-n%C3%BAmero-de-ocorr%C3%AAncias-de-crimes-em-2018_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+E também é necessário verificar o quão bem cada ponto foi agrupado. O coeficiente da silhueta avalia a similaridade de uma observação com o próprio grupo e com os grupos vizinhos. Um coeficiente da silhueta próximo de 1 indica que a observação está bem agrupada e próximo de -1 indica que a observação está mal agrupada.</p>
+<pre class="r"><code>fviz_silhouette(km, palette = &quot;jco&quot;,
+                ggtheme = theme_classic(), 
+                print.summary = F)</code></pre>
+<p><img src="/post/2019-11-27-an%C3%A1lise-de-clusters-dos-estados-brasileiros-por-n%C3%BAmero-de-ocorr%C3%AAncias-de-crimes-em-2018_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+A não ocorrência de valores negativos para o coeficiente da silhueta mostra que as observações estão bem agrupadas.</p>
+</div>
+<div id="k-medoids" class="section level3">
+<h3>K-medoids</h3>
+<p>No k-medoids, ao contrário do k-means, cada grupo é representado por uma das observações. Os pontos escolhidos são chamados de medoids. A medoide de um grupo é uma observação na qual a sua dissimilaridade com as demais observações do grupo é mínima. O k-medoids é mais robusto a ruídos e outliers comparado ao k-means. Para começar irei determinar o número de grupos que será utilizado para a construção do k-medoids.</p>
+<pre class="r"><code>fviz_nbclust(dados2, pam, method = &quot;wss&quot;) +
+  geom_vline(xintercept = 7, linetype = 2)+
+  labs(subtitle = &quot;Elbow method&quot;)</code></pre>
+<p><img src="/post/2019-11-27-an%C3%A1lise-de-clusters-dos-estados-brasileiros-por-n%C3%BAmero-de-ocorr%C3%AAncias-de-crimes-em-2018_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<pre class="r"><code>fviz_nbclust(dados2, pam, method = &quot;silhouette&quot;)+
+  theme_classic()</code></pre>
+<p><img src="/post/2019-11-27-an%C3%A1lise-de-clusters-dos-estados-brasileiros-por-n%C3%BAmero-de-ocorr%C3%AAncias-de-crimes-em-2018_files/figure-html/unnamed-chunk-10-2.png" width="672" />
+E sete grupos parece ser o número de grupos mais adequado para o k-medoids.</p>
+<pre class="r"><code>pm &lt;- pam(dados2, 7)
+fviz_cluster(pm, 
+             ellipse.type = &quot;t&quot;, 
+             repel = TRUE, 
+             ggtheme = theme_classic())</code></pre>
+<pre><code>## Too few points to calculate an ellipse
+## Too few points to calculate an ellipse
+## Too few points to calculate an ellipse
+## Too few points to calculate an ellipse</code></pre>
+<p><img src="/post/2019-11-27-an%C3%A1lise-de-clusters-dos-estados-brasileiros-por-n%C3%BAmero-de-ocorr%C3%AAncias-de-crimes-em-2018_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+E abaixo é mostrado o coeficiente da silhueta, para avaliar o quão bem cada observação foi agrupada.</p>
+<pre class="r"><code>fviz_silhouette(pm, palette = &quot;jco&quot;,
+                ggtheme = theme_classic(),
+                print.summary = F)</code></pre>
+<p><img src="/post/2019-11-27-an%C3%A1lise-de-clusters-dos-estados-brasileiros-por-n%C3%BAmero-de-ocorr%C3%AAncias-de-crimes-em-2018_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+Não há valores negativos para o coeficiente da silhueta, mas a largura média da silhueta foi menor que o obtido com o k-means, o que pode indicar uma leve superioridade do k-means.</p>
+</div>
+<div id="agrupamento-hierarquico" class="section level3">
+<h3>Agrupamento hierárquico</h3>
+<p>Com o agrupamento hierárquico não há necessidade de especificar o número de grupos na inicialização do método. O algoritmo se baseia em distâncias, aqui foi utilizada a euclidiana, para buscar similaridades entres as observações.</p>
+<pre class="r"><code>dados.dist &lt;- dist(dados2, method = &quot;euclidean&quot;)
+dados.hc &lt;- hclust(d = dados.dist, method = &quot;ward.D2&quot;)
+fviz_dend(dados.hc, cex = 0.5)</code></pre>
+<p><img src="/post/2019-11-27-an%C3%A1lise-de-clusters-dos-estados-brasileiros-por-n%C3%BAmero-de-ocorr%C3%AAncias-de-crimes-em-2018_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+A visualização do agrupamento hierárquico geralmente é feita através do dendrograma, como mostrado acima. A determinação do número de grupos fica a critério do pesquisador ou analista dos dados. Nesta análise irei cortar o dendrograma de forma a obter quatro grupos.</p>
+<pre class="r"><code>grp &lt;- cutree(dados.hc, k=4)
+table(grp) </code></pre>
+<pre><code>## grp
+##  1  2  3  4 
+## 11  2  8  6</code></pre>
+<pre class="r"><code>fviz_dend(dados.hc, k=4, 
+          cex = 0.5,
+          color_labels_by_k = TRUE, 
+          rect = TRUE)</code></pre>
+<p><img src="/post/2019-11-27-an%C3%A1lise-de-clusters-dos-estados-brasileiros-por-n%C3%BAmero-de-ocorr%C3%AAncias-de-crimes-em-2018_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+E também é possível representar os grupos nas componentes principais dos dados.</p>
+<pre class="r"><code>fviz_cluster(list(data = dados2, cluster = grp),
+             ellipse.type = &quot;convex&quot;, 
+             repel = TRUE, 
+             show.clust.cent = FALSE, ggtheme = theme_minimal())</code></pre>
+<p><img src="/post/2019-11-27-an%C3%A1lise-de-clusters-dos-estados-brasileiros-por-n%C3%BAmero-de-ocorr%C3%AAncias-de-crimes-em-2018_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+uma forma de avaliar o quão bem os grupos gerados pelo agrupamento hierárquico representam os dados é através da distância Cofenética. Irei calcular a distância Cofenética e calcular a sua correlação com a matriz de distâncias.</p>
+<pre class="r"><code>res.coph &lt;- cophenetic(dados.hc)
+cor(dados.dist, res.coph)</code></pre>
+<pre><code>## [1] 0.5558213</code></pre>
+<p>Os valores ideais para esta estatística são acima de 0,75. Utilizar a média como função de ligação geralmente produz melhores resultados para esta estatística, sendo este o motivo de sua maior utilização.</p>
+<pre class="r"><code>dados.hc.average &lt;- hclust(d = dados.dist, method = &quot;average&quot;)
+res.coph.average &lt;- cophenetic(dados.hc.average)
+cor(dados.dist, res.coph.average)</code></pre>
+<pre><code>## [1] 0.8358739</code></pre>
+</div>
+<div id="consideracoes-finais" class="section level3">
+<h3>Considerações finais</h3>
+<p>Os resultados obtidos foram um pouco distantes dos esperados por mim. Esperava que o Rio Grande do Norte ficasse no mesmo grupo dos demais estados do nordeste, o que não aconteceu em nenhum dos algorítimos utilizados. O Amapá não ter agrupado com os demais estados do norte também foi uma surpresa para mim, mas constatei com uma pesquisa rápida que o estado passou por uma escalada nos índices de violência, com sua capital sendo considerada até mesmo a 40ª cidade mais violenta do mundo e a 5ª mais violenta entre as capitais brasileiras em 2018.</p>
+<p>O fato de ter sido necessário eliminar algumas colunas também deve ter impactado os resultados. Os estados de São Paulo e Rio de Janeiro são lideres em roubos de carga, o que aproximaria os dois estados na análise, mas não foi possível verificar isto. Talvez o método de imputação de dados no mês de outubro para o estado do Rio de Janeiro também tenha impactado negativamente os resultados.</p>
+</div>
+
+    </div>
+    
+      <div class="pagination">
+        <div class="pagination__title">
+          <span class="pagination__title-h">Leia outras postagens</span>
+          <hr />
+        </div>
+        <div class="pagination__buttons">
+          
+          
+            <span class="button next">
+              <a href="/post/regress%C3%A3o-predi%C3%A7%C3%A3o-do-pre%C3%A7o-de-casas/">
+                <span class="button__text">Regressão: predição do preço de casas</span>
+                <span class="button__icon">→</span>
+              </a>
+            </span>
+          
+        </div>
+      </div>
+    
+
+    
+
+    </div>
+
+      </div>
+
+      
+        <footer class="footer">
+  <div class="footer__inner">
+    
+      <a href="/" class="logo" style="text-decoration: none;">
+  
+    <span class="logo__mark"><svg xmlns="http://www.w3.org/2000/svg" class="greater-icon" viewBox="0 0 44 44">
+  <path fill="none" d="M15 8l14.729 14.382L15 35.367"/>
+</svg>
+</span>
+    <span class="logo__text">Jefferson Barbosa</span>
+    <span class="logo__cursor"></span>
+  
+</a>
+
+      <div class="copyright">
+        <span>© 2019 Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a></span>
+        <span>Theme created by <a href="https://twitter.com/panr" target="_blank" rel="noopener">panr</a></span>
+      </div>
+    
+  </div>
+</footer>
+
+<script src="/assets/main.js"></script>
+<script src="/assets/prism.js"></script>
+
+
+      
+    </div>
+
+    
+  </body>
+</html>

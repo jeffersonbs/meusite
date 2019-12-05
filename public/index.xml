@@ -6,10 +6,19 @@
     <description>Recent content on Jefferson Barbosa</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Mon, 07 Oct 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 05 Dec 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Análise de clusters dos estados brasileiros por número de ocorrências de crimes em 2018</title>
+      <link>/post/an%C3%A1lise-de-clusters-dos-estados-brasileiros-por-n%C3%BAmero-de-ocorr%C3%AAncias-de-crimes-em-2018/</link>
+      <pubDate>Thu, 05 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/an%C3%A1lise-de-clusters-dos-estados-brasileiros-por-n%C3%BAmero-de-ocorr%C3%AAncias-de-crimes-em-2018/</guid>
+      <description>Com os altos índices de violência do Brasil, me interessei por analisar como os estados se assemelham em relação ao número de ocorrências de crimes. Para isso peguei os dados disponíveis no site do ministério da justiça e segurança pública, com o número absoluto de ocorrências de 9 crimes nos 26 estados e no distrito federal: estupro, furto de veículo, homicídio doloso, lesão corporal seguida de morte, roubo a instituição financeira, roubo de carga, roubo de veículo latrocínio e tentativa de homicídio.</description>
+    </item>
     
     <item>
       <title>Regressão: predição do preço de casas</title>

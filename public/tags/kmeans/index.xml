@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Jefferson Barbosa</title>
-    <link>/post/</link>
-    <description>Recent content in Posts on Jefferson Barbosa</description>
+    <title>kmeans on Jefferson Barbosa</title>
+    <link>/tags/kmeans/</link>
+    <description>Recent content in kmeans on Jefferson Barbosa</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
     <lastBuildDate>Thu, 05 Dec 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="/tags/kmeans/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -18,16 +18,6 @@
       
       <guid>/post/an%C3%A1lise-de-clusters-dos-estados-brasileiros-por-n%C3%BAmero-de-ocorr%C3%AAncias-de-crimes-em-2018/</guid>
       <description>Com os altos índices de violência do Brasil, me interessei por analisar como os estados se assemelham em relação ao número de ocorrências de crimes. Para isso peguei os dados disponíveis no site do ministério da justiça e segurança pública, com o número absoluto de ocorrências de 9 crimes nos 26 estados e no distrito federal: estupro, furto de veículo, homicídio doloso, lesão corporal seguida de morte, roubo a instituição financeira, roubo de carga, roubo de veículo latrocínio e tentativa de homicídio.</description>
-    </item>
-    
-    <item>
-      <title>Regressão: predição do preço de casas</title>
-      <link>/post/regress%C3%A3o-predi%C3%A7%C3%A3o-do-pre%C3%A7o-de-casas/</link>
-      <pubDate>Mon, 07 Oct 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/post/regress%C3%A3o-predi%C3%A7%C3%A3o-do-pre%C3%A7o-de-casas/</guid>
-      <description>Sobre os dados  Os dados utilizados aqui são provenientes da competição do Kaggle chamada de House prices: Advanced Regression Techniques. O conjunto de dados contêm 80 variáveis explicativas sobre algumas casas em Ames/Iowa e o objetivo é o de predizer o valor de venda dessas casas.
-Nesta publicação eu mostrarei o passo a passo da minha análise, mostrado a forma como eu limpei os dados, o feature engineering e a modelagem.</description>
     </item>
     
   </channel>

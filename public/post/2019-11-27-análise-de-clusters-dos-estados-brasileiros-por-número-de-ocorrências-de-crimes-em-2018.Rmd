@@ -1,0 +1,161 @@
+---
+title: Análise de clusters dos estados brasileiros por número de ocorrências de crimes
+  em 2018
+author: Jefferson Barbosa
+date: '2019-12-05'
+slug: análise-de-clusters-dos-estados-brasileiros-por-número-de-ocorrências-de-crimes-em-2018
+categories: []
+tags:
+  - unsupervised
+  - kmeans
+  - kmedoids
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T,
+                      results = "hide")
+options(width=200)
+```
+```{r, include=FALSE}
+load("/home/jefferson/Documentos/Crimes/publicacao.Rdata")
+```
+Com os altos índices de violência do Brasil, me interessei por analisar como os estados se assemelham em relação ao número de ocorrências de crimes. Para isso peguei os dados disponíveis no site do ministério da justiça e segurança pública, com o número absoluto de ocorrências de 9 crimes nos 26 estados e no distrito federal: estupro, furto de veículo, homicídio doloso, lesão corporal seguida de morte, roubo a instituição financeira, roubo de carga, roubo de veículo latrocínio e tentativa de homicídio. E para tornar os números comparáveis calculei a taxa por 100 mil habitantes.
+<style>
+pre {
+  white-space: pre !important;
+  overflow-y: scroll !important;
+  max-height: 50vh !important;
+}
+</style>
+```{r, include=T, results='markup'}
+dados
+```
+Porém encontrei alguns problemas com os dados. O estado do Rio de Janeiro não publicou dados para o mês de outubro e vários estados não publicaram dados sobre roubos a instituição financeira e sobre roubos de carga. Para a primeira situação eu julguei válido imputar a média dos demais meses a fim de viabilizar a análise e comprometer o mínimo os resultados. Já para a segunda situação eu julguei que seria melhor não incluir as variáveis. 
+
+Nesta análise utilizarei a padronização das variáveis.
+```{r, include=T, results='markup'}
+dados2 <- scale(dados[,-c(5,6)], center = TRUE, scale = TRUE)
+```
+E utilizarei os seguintes pacotes:
+```{r,warning=FALSE,message=FALSE}
+library(clustertend)
+library(factoextra)
+library(NbClust)
+library(cluster)
+```
+### Tendência de agrupamento
+Como os métodos de agrupamento impõe grupos mesmo quando os dados são gerados de maneira aleatória, então é necessário verificar se o conjunto de dados possui grupos significativos. Para isso utilizarei a estatística de Hopkins. O método consiste em comparar os dados a uma amostra aleatória de uma variável aleatória com distribuição uniforme. Um valor da estatística menor que 0.5 indica que os dados são agrupáveis. 
+```{r, include=T, results='markup'}
+set.seed(125)
+hopkins(dados2, n = nrow(dados2) - 1)
+```
+O valor de H = 0.30 indica que o conjunto de dados é altamente agrupável.
+
+### K-means
+Para utilizar o k-means é necessário primeiro definir o número de grupos que o método irá formar. Para isto utilizei as técnicas do cotovelo e o da largura média de silhueta. 
+```{r, include=T, results='markup'}
+fviz_nbclust(dados2, kmeans, method = "wss") +
+  geom_vline(xintercept = 4, linetype = 2)+
+  labs(subtitle = "Elbow method")
+
+fviz_nbclust(dados2, kmeans, method = "silhouette")+
+  labs(subtitle = "Silhouette method")
+```
+Nas duas técnicas há evidências de que o número adequado de grupos deve ser quatro. Portanto irei fazer o k-means utilizando quatro grupos.
+```{r, eval=F}
+km <- eclust(dados2, "kmeans", k = 4, nstart = 50, graph = FALSE)
+fviz_cluster(km, data = dados2,
+             ellipse.type = "euclid", 
+             star.plot = TRUE, 
+             repel = TRUE,
+             ggtheme = theme_minimal())
+```
+```{r,echo=F, results='markup'}
+fviz_cluster(km, data = dados2,
+             ellipse.type = "euclid", 
+             star.plot = TRUE, 
+             repel = TRUE,
+             ggtheme = theme_minimal())
+```
+E também é necessário verificar o quão bem cada ponto foi agrupado. O coeficiente da silhueta avalia a similaridade de uma observação com o próprio grupo e com os grupos vizinhos. Um coeficiente da silhueta próximo de 1 indica que a observação está bem agrupada e próximo de -1 indica que a observação está mal agrupada.
+```{r,include=T, results='markup'}
+fviz_silhouette(km, palette = "jco",
+                ggtheme = theme_classic(), 
+                print.summary = F)
+```
+A não ocorrência de valores negativos para o coeficiente da silhueta mostra que as observações estão bem agrupadas.
+
+### K-medoids
+No k-medoids, ao contrário do k-means, cada grupo é representado por uma das observações. Os pontos escolhidos são chamados de medoids. A medoide de um grupo é uma observação na qual a sua dissimilaridade com as demais observações do grupo é mínima. O k-medoids é mais robusto a ruídos e outliers comparado ao k-means. Para começar irei determinar o número de grupos que será utilizado para a construção do k-medoids.
+```{r, include=T, results='markup'}
+fviz_nbclust(dados2, pam, method = "wss") +
+  geom_vline(xintercept = 7, linetype = 2)+
+  labs(subtitle = "Elbow method")
+
+fviz_nbclust(dados2, pam, method = "silhouette")+
+  theme_classic()
+```
+E sete grupos parece ser o número de grupos mais adequado para o k-medoids.
+```{r, eval=F}
+pm <- pam(dados2, 7)
+fviz_cluster(pm, 
+             ellipse.type = "t", 
+             repel = TRUE, 
+             ggtheme = theme_classic())
+```
+```{r,echo=F, results='markup'}
+fviz_cluster(pm, 
+             ellipse.type = "t", 
+             repel = TRUE, 
+             ggtheme = theme_classic())
+```
+E abaixo é mostrado o coeficiente da silhueta, para avaliar o quão bem cada observação foi agrupada.
+```{r,include=T, results='markup'}
+fviz_silhouette(pm, palette = "jco",
+                ggtheme = theme_classic(),
+                print.summary = F)
+```
+Não há valores negativos para o coeficiente da silhueta, mas a largura média da silhueta foi menor que o obtido com o k-means, o que pode indicar uma leve superioridade do k-means. 
+
+### Agrupamento hierárquico 
+Com o agrupamento hierárquico não há necessidade de especificar o número de grupos na inicialização do método. O algoritmo se baseia em distâncias, aqui foi utilizada a euclidiana, para buscar similaridades entres as observações. 
+```{r,include=T, results='markup'}
+dados.dist <- dist(dados2, method = "euclidean")
+dados.hc <- hclust(d = dados.dist, method = "ward.D2")
+fviz_dend(dados.hc, cex = 0.5)
+``` 
+A visualização do agrupamento hierárquico geralmente é feita através do dendrograma, como mostrado acima. A determinação do número de grupos fica a critério do pesquisador ou analista dos dados. Nesta análise irei cortar o dendrograma de forma a obter quatro grupos.
+```{r,include=T, results='markup'}
+grp <- cutree(dados.hc, k=4)
+table(grp) 
+fviz_dend(dados.hc, k=4, 
+          cex = 0.5,
+          color_labels_by_k = TRUE, 
+          rect = TRUE)
+```
+E também é possível representar os grupos nas componentes principais dos dados.
+```{r,include=T, results='markup'}
+fviz_cluster(list(data = dados2, cluster = grp),
+             ellipse.type = "convex", 
+             repel = TRUE, 
+             show.clust.cent = FALSE, ggtheme = theme_minimal())
+```
+uma forma de avaliar o quão bem os grupos gerados pelo agrupamento hierárquico representam os dados é através da distância Cofenética. Irei calcular a distância Cofenética e calcular a sua correlação com a matriz de distâncias. 
+```{r,include=T, results='markup'}
+res.coph <- cophenetic(dados.hc)
+cor(dados.dist, res.coph)
+```
+Os valores ideais para esta estatística são acima de 0,75. Utilizar a média como função de ligação geralmente produz melhores resultados para esta estatística, sendo este o motivo de sua maior utilização.
+```{r,include=T, results='markup'}
+dados.hc.average <- hclust(d = dados.dist, method = "average")
+res.coph.average <- cophenetic(dados.hc.average)
+cor(dados.dist, res.coph.average)
+```
+
+### Considerações finais
+
+Os resultados obtidos foram um pouco distantes dos esperados por mim. Esperava que o Rio Grande do Norte ficasse no mesmo grupo dos demais estados do nordeste, o que não aconteceu em nenhum dos algorítimos utilizados. O Amapá não ter agrupado com os demais estados do norte também foi uma surpresa para mim, mas constatei com uma pesquisa rápida que o estado passou por uma escalada nos índices de violência, com sua capital sendo considerada até mesmo a 40ª cidade mais violenta do mundo e a 5ª mais violenta entre as capitais brasileiras em 2018. 
+
+O fato de ter sido necessário eliminar algumas colunas também deve ter impactado os resultados. Os estados de São Paulo e Rio de Janeiro são lideres em roubos de carga, o que aproximaria os dois estados na análise, mas não foi possível verificar isto. Talvez o método de imputação de dados no mês de outubro para o estado do Rio de Janeiro também tenha impactado negativamente os resultados.
