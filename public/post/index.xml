@@ -6,10 +6,20 @@
     <description>Recent content in Posts on Jefferson Barbosa</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>pt-br</language>
-    <lastBuildDate>Thu, 05 Dec 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 30 May 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Gráfico animado</title>
+      <link>/post/gr%C3%A1fico-animado/</link>
+      <pubDate>Sat, 30 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/post/gr%C3%A1fico-animado/</guid>
+      <description>pre { white-space: pre !important; overflow-y: scroll !important; max-height: 50vh !important; }  Para produzir este exemplo irei utilizar os dados sobre as principais causas de mortalidade no Brasil, de 1990 até 2017, para ambos os sexos e idades, de portadores do vírus HIV. A base de dados está disponível no site http://svs.aids.gov.br/dantps/centrais-de-conteudos/paineis-de-monitoramento/mortalidade/gbd-brasil/principais-causas/ e utilizarei a taxa de mortalidade por 100.000 habitantes.
+Para produzir o gráfico utilizarei o pacote ggplot2 em conjunto com o pacote gganimate e gifski.</description>
+    </item>
     
     <item>
       <title>Análise de clusters dos estados brasileiros por número de ocorrências de crimes em 2018</title>
