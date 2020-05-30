@@ -17,8 +17,8 @@
       <pubDate>Sat, 30 May 2020 00:00:00 +0000</pubDate>
       
       <guid>/post/gr%C3%A1fico-animado/</guid>
-      <description>pre { white-space: pre !important; overflow-y: scroll !important; max-height: 50vh !important; }  Para produzir este exemplo irei utilizar os dados sobre as principais causas de mortalidade no Brasil, de 1990 até 2017, para ambos os sexos e idades, de portadores do vírus HIV. A base de dados está disponível no site http://svs.aids.gov.br/dantps/centrais-de-conteudos/paineis-de-monitoramento/mortalidade/gbd-brasil/principais-causas/ e utilizarei a taxa de mortalidade por 100.000 habitantes.
-Para produzir o gráfico utilizarei o pacote ggplot2 em conjunto com o pacote gganimate e gifski.</description>
+      <description>Para produzir este exemplo irei utilizar os dados sobre as principais causas de mortalidade no Brasil, de 1990 até 2017, para ambos os sexos e idades, de portadores do vírus HIV. A base de dados está disponível no site http://svs.aids.gov.br/dantps/centrais-de-conteudos/paineis-de-monitoramento/mortalidade/gbd-brasil/principais-causas/ e utilizarei a taxa de mortalidade por 100.000 habitantes.
+Para produzir o gráfico utilizarei o pacote ggplot2 em conjunto com o pacote gganimate e gifski. O gganimate é responsável por animar o gráfico, e em conjunto com o gifski, transformam o resultado em um gif.</description>
     </item>
     
     <item>

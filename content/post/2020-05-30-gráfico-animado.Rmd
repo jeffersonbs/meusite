@@ -13,13 +13,7 @@ knitr::opts_chunk$set(echo = T,
 options(width=200)
 ```
 
-  <style>
-pre {
-  white-space: pre !important;
-  overflow-y: scroll !important;
-  max-height: 50vh !important;
-}
-</style>
+
 
 Para produzir este exemplo irei utilizar os dados sobre as principais causas de mortalidade no Brasil, de 1990 até 2017, para ambos os sexos e idades, de portadores do vírus HIV. A base de dados está disponível no site <http://svs.aids.gov.br/dantps/centrais-de-conteudos/paineis-de-monitoramento/mortalidade/gbd-brasil/principais-causas/> e utilizarei a taxa de mortalidade por 100.000 habitantes.
 
@@ -53,7 +47,7 @@ dados <- dados %>%
 
 E fico com o seguinte data frame.
 ```{r, include=T, results='markup'}
-head(dados)
+dados
 ```
 
 Portanto já posso partir para a confecção do gráfico. Começo confeccionando um gráfico comum no ggplot, mas adiciono o comando transition_reveal(Ano), que produz um gráfico para cada ano e depois vai juntar tudo em um único gif.
@@ -62,9 +56,15 @@ ggplot(dados, aes(x = Ano, y = Taxa.de.mortalidade, color = Causa)) +
   geom_line() +
   geom_dl(aes(label = paste(Causa, Taxa.de.mortalidade, sep = " ")), method = "last.points") + 
   theme_bw() + theme(legend.position = "none") +
-  scale_x_continuous(breaks = seq(1990, 2017, 3), limits = c(1990, 2030))  +
+  scale_x_continuous(breaks = seq(1990, 2017, 3))  +
   labs(x = "Ano", y = "Taxa de mortalidade/100.000 habitantes") +
    transition_reveal(Ano) 
 ```
-
+  <style>
+pre {
+  white-space: pre !important;
+  overflow-y: scroll !important;
+  max-height: 50vh !important;
+}
+</style>
 E assim se pode produzir um gráfico animado simples no R.
